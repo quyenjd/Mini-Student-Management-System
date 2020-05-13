@@ -448,14 +448,6 @@ namespace Csv
         --_size;
     }
 
-    Int table::get_key (const multitype& e) const
-    {
-        for (Int i = 0; i < keys.size(); ++i)
-            if (e.strict_equal(keys.at(i)))
-                return i;
-        return -1;
-    }
-
     table::table()
     {
         rows = new plist();
@@ -464,6 +456,8 @@ namespace Csv
 
     void table::add_key (const multitype& e)
     {
+        if (has_key(e))
+            return;
         keys.push_back(e);
         plist *head = rows;
         while (head->next != nullptr)
@@ -492,6 +486,14 @@ namespace Csv
     bool table::has_key (const multitype& e) const
     {
         return get_key(e) != -1;
+    }
+
+    Int table::get_key (const multitype& e) const
+    {
+        for (Int i = 0; i < keys.size(); ++i)
+            if (e.strict_equal(keys.at(i)))
+                return i;
+        return -1;
     }
 
     list table::get_keys() const
