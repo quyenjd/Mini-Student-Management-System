@@ -1,4 +1,6 @@
-#include "csv.h"
+#ifndef CSV_IMPL_QUYENJD_H
+#define CSV_IMPL_QUYENJD_H
+
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
@@ -326,15 +328,17 @@ namespace Csv
         return false;
     }
 
-    list::list (Int num_elms)
+    template<typename T>
+    list<T>::list (Int num_elms)
     {
         head = new iter();
         _size = 0;
         for (Int i = 0; i < num_elms; ++i)
-            push_back(multitype());
+            push_back(T());
     }
 
-    void list::push_back (const multitype& e)
+    template<typename T>
+    void list<T>::push_back (const T& e)
     {
         iter *root = head;
         while (root->next != nullptr)
@@ -344,7 +348,8 @@ namespace Csv
         ++_size;
     }
 
-    void list::push_front (const multitype& e)
+    template<typename T>
+    void list<T>::push_front (const T& e)
     {
         iter *add = new iter();
         add->next = head->next;
@@ -353,33 +358,36 @@ namespace Csv
         ++_size;
     }
 
-    multitype list::pop_back()
+    template<typename T>
+    T list<T>::pop_back()
     {
         if (empty())
-            return multitype("bad_access");
+            return T();
         iter *root = head;
         while (root->next->next != nullptr)
             root = root->next;
-        multitype value = root->next->value;
+        T value = root->next->value;
         delete[] root->next;
         root->next = nullptr;
         --_size;
         return value;
     }
 
-    multitype list::pop_front()
+    template<typename T>
+    T list<T>::pop_front()
     {
         if (empty())
-            return multitype("bad_access");
+            return T();
         iter *next = head->next->next;
-        multitype value = head->next->value;
+        T value = head->next->value;
         delete[] head->next;
         head->next = next;
         --_size;
         return value;
     }
 
-    void list::insert (Int pos, const multitype& e)
+    template<typename T>
+    void list<T>::insert (Int pos, const T& e)
     {
         iter *root = head;
         while (pos-- && root->next != nullptr)
@@ -391,7 +399,8 @@ namespace Csv
         ++_size;
     }
 
-    void list::destroy_util (iter *root)
+    template<typename T>
+    void list<T>::destroy_util (iter *root)
     {
         if (root->next != nullptr)
             destroy_util(root->next);
@@ -400,42 +409,48 @@ namespace Csv
         --_size;
     }
 
-    void list::destroy()
+    template<typename T>
+    void list<T>::destroy()
     {
         destroy_util(head);
     }
 
-    bool list::empty() const
+    template<typename T>
+    bool list<T>::empty() const
     {
         return head->next == nullptr;
     }
 
-    Int list::size() const
+    template<typename T>
+    Int list<T>::size() const
     {
         return _size;
     }
 
-    multitype& list::at (Int pos)
+    template<typename T>
+    T& list<T>::at (Int pos)
     {
         if (pos < 0 || pos >= _size)
-            return *new multitype("bad_access");
+            return *new T();
         iter *root = head;
         while (pos-- && root->next != nullptr)
             root = root->next;
         return root->next->value;
     }
 
-    multitype list::at (Int pos) const
+    template<typename T>
+    T list<T>::at (Int pos) const
     {
         if (pos < 0 || pos >= _size)
-            return multitype("bad_access");
+            return T();
         iter *root = head;
         while (pos-- && root->next != nullptr)
             root = root->next;
         return root->next->value;
     }
 
-    void list::delete_at (Int pos)
+    template<typename T>
+    void list<T>::delete_at (Int pos)
     {
         if (pos < 0 || pos >= _size)
             return;
@@ -496,7 +511,7 @@ namespace Csv
         return -1;
     }
 
-    list table::get_keys() const
+    list<multitype> table::get_keys() const
     {
         return keys;
     }
@@ -507,7 +522,7 @@ namespace Csv
         while (head->next != nullptr)
             head = head->next;
         head->next = new plist();
-        head->next->value = list(keys.size());
+        head->next->value = list<multitype>(keys.size());
         ++_num_rows;
     }
 
@@ -529,31 +544,31 @@ namespace Csv
         return _num_rows;
     }
 
-    list& table::get_row (Int row)
+    list<multitype>& table::get_row (Int row)
     {
         if (row < 0 || row >= _num_rows)
-            return *new list();
+            return *new list<multitype>();
         plist *head = rows;
         while (row-- && head->next != nullptr)
             head = head->next;
         return head->next->value;
     }
 
-    list table::get_row (Int row) const
+    list<multitype> table::get_row (Int row) const
     {
         if (row < 0 || row >= _num_rows)
-            return *new list();
+            return *new list<multitype>();
         plist *head = rows;
         while (row-- && head->next != nullptr)
             head = head->next;
         return head->next->value;
     }
 
-    list& table::get_row_where (const multitype& key_search, const multitype& e)
+    list<multitype>& table::get_row_where (const multitype& key_search, const multitype& e)
     {
         Int key_id = get_key(key_search);
         if (key_id == -1)
-            return *new list();
+            return *new list<multitype>();
         plist *head = rows;
         while (head->next != nullptr)
         {
@@ -561,14 +576,14 @@ namespace Csv
                 return head->next->value;
             head = head->next;
         }
-        return *new list();
+        return *new list<multitype>();
     }
 
-    list table::get_row_where (const multitype& key_search, const multitype& e) const
+    list<multitype> table::get_row_where (const multitype& key_search, const multitype& e) const
     {
         Int key_id = get_key(key_search);
         if (key_id == -1)
-            return list();
+            return list<multitype>();
         plist *head = rows;
         while (head->next != nullptr)
         {
@@ -576,7 +591,7 @@ namespace Csv
                 return head->next->value;
             head = head->next;
         }
-        return list();
+        return list<multitype>();
     }
 
     multitype& table::get (Int row, const multitype& key)
@@ -665,7 +680,7 @@ namespace Csv
         Pchar ret = new Char[csv_str.size() + 1];
         Int i = 0;
         for (; !csv_str.empty(); ++i)
-            ret[i] = csv_str.pop_front().to_char();
+            ret[i] = csv_str.pop_front();
         ret[i] = '\0';
         return ret;
     }
@@ -739,7 +754,7 @@ namespace Csv
         for (Int i = _table.num_rows() - 1; i >= 0; --i)
         {
             bool has_unknown = false;
-            list _row = _table.get_row(i);
+            list<multitype> _row = _table.get_row(i);
             for (Int j = 0; j < _row.size(); ++j)
                 has_unknown |= _row.at(j).is_unknown();
             if (has_unknown)
@@ -793,3 +808,5 @@ namespace Csv
         return _table;
     }
 }
+
+#endif // CSV_IMPL_QUYENJD_H

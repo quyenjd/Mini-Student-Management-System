@@ -97,13 +97,14 @@ namespace Csv
     };
 
     // a linked list powered by a handful of functions.
+    template<typename T>
     class list
     {
     private:
         struct iter
         {
             struct iter *next;
-            multitype value;
+            T value;
         } *head;
         Int _size;
         void destroy_util (iter *root);
@@ -114,19 +115,19 @@ namespace Csv
         list (Int num_elms = 0);
 
         // push an element with value 'e' to the back of the list.
-        void push_back (const multitype& e);
+        void push_back (const T& e);
 
         // push an element with value 'e' to the front of the list.
-        void push_front (const multitype& e);
+        void push_front (const T& e);
 
         // pop an element from the back of the list and return it.
-        multitype pop_back();
+        T pop_back();
 
         // pop an element from the front of the list and return it.
-        multitype pop_front();
+        T pop_front();
 
         // insert an element with value 'e' at the position 'pos'.
-        void insert (Int pos, const multitype& e);
+        void insert (Int pos, const T& e);
 
         // destroy the list, i.e. delete all elements.
         void destroy();
@@ -138,8 +139,8 @@ namespace Csv
         Int size() const;
 
         // get the value at the position 'pos'.
-        multitype& at (Int pos);
-        multitype at (Int pos) const;
+        T& at (Int pos);
+        T  at (Int pos) const;
 
         // remove the element at the position 'pos' from the list.
         void delete_at (Int pos);
@@ -152,9 +153,9 @@ namespace Csv
         struct plist
         {
             struct plist *next;
-            list value;
+            list<multitype> value;
         } *rows;
-        list keys;
+        list<multitype> keys;
 
         Int _num_rows;
 
@@ -175,7 +176,7 @@ namespace Csv
         Int get_key (const multitype& e) const;
 
         // get the name list of all table columns.
-        list get_keys() const;
+        list<multitype> get_keys() const;
 
         // add a row to the table
         void add_row();
@@ -188,19 +189,19 @@ namespace Csv
         Int num_rows() const;
 
         // get the 'row'-th row.
-        list& get_row (Int row);
-        list get_row (Int row) const;
+        list<multitype>& get_row (Int row);
+        list<multitype>  get_row (Int row) const;
 
         // get the row where the column named 'key_search' has the value of 'e'.
         // this function uses equal() to compare the values.
         // if there are multiple rows satisfying the condition, only the first valid
         // one is returned.
-        list& get_row_where (const multitype& key_search, const multitype& e);
-        list get_row_where (const multitype& key_search, const multitype& e) const;
+        list<multitype>& get_row_where (const multitype& key_search, const multitype& e);
+        list<multitype>  get_row_where (const multitype& key_search, const multitype& e) const;
 
         // get the value of the column named 'key' on the 'row'-th row.
         multitype& get (Int row, const multitype& key);
-        multitype get (Int row, const multitype& key) const;
+        multitype  get (Int row, const multitype& key) const;
 
         // get the value of the column named 'key_get' on the row where there is
         // a column named 'key_search' that has the value of 'e'.
@@ -208,7 +209,7 @@ namespace Csv
         // if there are multiple rows satisfying the condition, only the first valid
         // one is returned.
         multitype& get_where (const multitype& key_search, const multitype& e, const multitype& key_get);
-        multitype get_where (const multitype& key_search, const multitype& e, const multitype& key_get) const;
+        multitype  get_where (const multitype& key_search, const multitype& e, const multitype& key_get) const;
     };
 
     // a csv file reader/writer. ONLY INITIALIZE THIS ONCE in the project and
@@ -220,7 +221,7 @@ namespace Csv
         Pchar filename;
         FILE *fptr;
 
-        list csv_str;
+        list<Char> csv_str;
         Char csv_read_char();
         Char csv_break_line();
         Pchar csv_export_pchar();
@@ -253,8 +254,10 @@ namespace Csv
 
         // get the table.
         table& get_table();
-        table get_table() const;
+        table  get_table() const;
     };
 };
+
+#include "csv_impl.h"
 
 #endif // CSV_QUYENJD_H
