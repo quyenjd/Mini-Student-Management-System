@@ -2,6 +2,7 @@
 #define CSV_QUYENJD_H
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <cmath>
 #include <cinttypes>
