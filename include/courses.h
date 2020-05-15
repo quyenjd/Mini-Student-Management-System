@@ -8,7 +8,7 @@ namespace SMS
     struct student {};
     struct course
     {
-        list<student*> s;
+        list<student*> st;
         multitype no;
         multitype course_id,course_name,course_class;
         multitype lec_user,lec_name,lec_degree,leg_gender;
@@ -21,6 +21,8 @@ namespace SMS
     {
     public:
         list<course*> c;
+
+        void import_course();
     };
 
 
@@ -28,14 +30,24 @@ namespace SMS
     class academic_year
     {
     public:
+<<<<<<< Updated upstream
         //constructor
         //academic_year();
+=======
+>>>>>>> Stashed changes
         list<semester*> s;
         multitype school_year;
 
         void add_semester (semester *sem);
+<<<<<<< Updated upstream
         multitype get_school_year ();
         void set_school_year (const multitype &name); // or update school_year
+=======
+        multitype get_school_year (); // get school year name multitype -> convert to_str() to print
+        void set_school_year (const multitype &name); // or update school_year or set a name to a school year
+        void delete_semester(semester *sem);
+        void view_semester();
+>>>>>>> Stashed changes
     };
 
 
@@ -43,8 +55,15 @@ namespace SMS
     class school
     {
         list<academic_year*> a;
+<<<<<<< Updated upstream
         void add_year (academic_year *y);
         void delete_academic_year (academic_year *year);
+=======
+
+        void add_year (academic_year *y);
+        void delete_academic_year (academic_year *year);
+        void view_academic_year();
+>>>>>>> Stashed changes
     };
 
     course* create_course();
