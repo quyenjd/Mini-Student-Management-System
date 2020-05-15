@@ -8,84 +8,84 @@
 
 namespace Csv
 {
-    void string_copy (const Pchar from, Pchar& to)
+    inline void string_copy (const Pchar from, Pchar& to)
     {
         to = (Pchar)malloc(strlen(from) + 1);
         for (Pchar p = to; (*p = *from) != '\0'; ++p, ++from);
     }
 
-    multitype::multitype()
+    inline multitype::multitype()
     {
         init();
     }
 
-    multitype::multitype (const Int e)
+    inline multitype::multitype (const Int e)
     {
         assign(e);
     }
 
-    multitype::multitype (const Long e)
+    inline multitype::multitype (const Long e)
     {
         assign(e);
     }
 
-    multitype::multitype (const Char e)
+    inline multitype::multitype (const Char e)
     {
         assign(e);
     }
 
-    multitype::multitype (const Pchar e)
+    inline multitype::multitype (const Pchar e)
     {
         assign(e);
     }
 
-    multitype::multitype (const Double e)
+    inline multitype::multitype (const Double e)
     {
         assign(e);
     }
 
-    multitype::multitype (const multitype& e)
+    inline multitype::multitype (const multitype& e)
     {
         assign(e);
     }
 
-    void multitype::init()
+    inline void multitype::init()
     {
         string_copy("unknown", _type);
         values = _tunknown();
     }
 
-    void multitype::assign (const Int e)
+    inline void multitype::assign (const Int e)
     {
         string_copy("int", _type);
         values._tint = e;
     }
 
-    void multitype::assign (const Long e)
+    inline void multitype::assign (const Long e)
     {
         string_copy("long", _type);
         values._tlong = e;
     }
 
-    void multitype::assign (const Char e)
+    inline void multitype::assign (const Char e)
     {
         string_copy("char", _type);
         values._tchar = e;
     }
 
-    void multitype::assign (const Pchar e)
+    inline void multitype::assign (const Pchar e)
     {
         string_copy("str", _type);
         string_copy(e, values._tpchar);
     }
 
-    void multitype::assign (const Double e)
+    inline void multitype::assign (const Double e)
     {
         string_copy("double", _type);
         values._tdouble = e;
     }
 
-    void multitype::assign (const multitype& e)
+    inline void multitype::assign (const multitype& e)
     {
         string_copy(e.type(), _type);
         if (e.is_type("int"))
@@ -100,58 +100,58 @@ namespace Csv
             values._tdouble = e.to_double();
     }
 
-    multitype& multitype::operator= (const Int e)
+    inline multitype& multitype::operator= (const Int e)
     {
         assign(e);
         return *this;
     }
 
-    multitype& multitype::operator= (const Long e)
+    inline multitype& multitype::operator= (const Long e)
     {
         assign(e);
         return *this;
     }
 
-    multitype& multitype::operator= (const Char e)
+    inline multitype& multitype::operator= (const Char e)
     {
         assign(e);
         return *this;
     }
 
-    multitype& multitype::operator= (const Pchar e)
+    inline multitype& multitype::operator= (const Pchar e)
     {
         assign(e);
         return *this;
     }
 
-    multitype& multitype::operator= (const Double e)
+    inline multitype& multitype::operator= (const Double e)
     {
         assign(e);
         return *this;
     }
 
-    multitype& multitype::operator= (const multitype& e)
+    inline multitype& multitype::operator= (const multitype& e)
     {
         assign(e);
         return *this;
     }
 
-    char* multitype::type() const
+    inline char* multitype::type() const
     {
         return _type;
     }
 
-    bool multitype::is_type (const Pchar e) const
+    inline bool multitype::is_type (const Pchar e) const
     {
         return strcmp(_type, e) == 0;
     }
 
-    bool multitype::is_unknown() const
+    inline bool multitype::is_unknown() const
     {
         return is_type("unknown");
     }
 
-    Int multitype::to_int() const
+    inline Int multitype::to_int() const
     {
         if (is_type("int"))
             return values._tint;
@@ -177,7 +177,7 @@ namespace Csv
         return 0;
     }
 
-    Long multitype::to_long() const
+    inline Long multitype::to_long() const
     {
         if (is_type("int"))
             return values._tint;
@@ -203,7 +203,7 @@ namespace Csv
         return 0;
     }
 
-    Char multitype::to_char() const
+    inline Char multitype::to_char() const
     {
         if (is_type("int"))
         {
@@ -224,7 +224,7 @@ namespace Csv
         return 0;
     }
 
-    Pchar multitype::to_str() const
+    inline Pchar multitype::to_str() const
     {
         if (is_type("int"))
         {
@@ -255,7 +255,7 @@ namespace Csv
         return new char;
     }
 
-    Double multitype::to_double() const
+    inline Double multitype::to_double() const
     {
         if (is_type("int"))
             return (Double)values._tint;
@@ -300,7 +300,7 @@ namespace Csv
         #endif
     }
 
-    bool multitype::equal (const multitype& e) const
+    inline bool multitype::equal (const multitype& e) const
     {
         if (is_type(e.type()))
             return strict_equal(e);
@@ -311,7 +311,7 @@ namespace Csv
         return to_long() == e.to_long();
     }
 
-    bool multitype::strict_equal (const multitype& e) const
+    inline bool multitype::strict_equal (const multitype& e) const
     {
         if (!is_type(e.type()))
             return false;
@@ -329,7 +329,7 @@ namespace Csv
     }
 
     template<typename T>
-    list<T>::list (Int num_elms)
+    inline list<T>::list (Int num_elms)
     {
         head = new iter();
         _size = 0;
@@ -338,7 +338,7 @@ namespace Csv
     }
 
     template<typename T>
-    void list<T>::push_back (const T& e)
+    inline void list<T>::push_back (const T& e)
     {
         iter *root = head;
         while (root->next != nullptr)
@@ -349,7 +349,7 @@ namespace Csv
     }
 
     template<typename T>
-    void list<T>::push_front (const T& e)
+    inline void list<T>::push_front (const T& e)
     {
         iter *add = new iter();
         add->next = head->next;
@@ -359,7 +359,7 @@ namespace Csv
     }
 
     template<typename T>
-    T list<T>::pop_back()
+    inline T list<T>::pop_back()
     {
         if (empty())
             return T();
@@ -374,7 +374,7 @@ namespace Csv
     }
 
     template<typename T>
-    T list<T>::pop_front()
+    inline T list<T>::pop_front()
     {
         if (empty())
             return T();
@@ -387,7 +387,7 @@ namespace Csv
     }
 
     template<typename T>
-    void list<T>::insert (Int pos, const T& e)
+    inline void list<T>::insert (Int pos, const T& e)
     {
         iter *root = head;
         while (pos-- && root->next != nullptr)
@@ -400,7 +400,7 @@ namespace Csv
     }
 
     template<typename T>
-    void list<T>::destroy_util (iter *root)
+    inline void list<T>::destroy_util (iter *root)
     {
         if (root->next != nullptr)
             destroy_util(root->next);
@@ -410,25 +410,25 @@ namespace Csv
     }
 
     template<typename T>
-    void list<T>::destroy()
+    inline void list<T>::destroy()
     {
         destroy_util(head);
     }
 
     template<typename T>
-    bool list<T>::empty() const
+    inline bool list<T>::empty() const
     {
         return head->next == nullptr;
     }
 
     template<typename T>
-    Int list<T>::size() const
+    inline Int list<T>::size() const
     {
         return _size;
     }
 
     template<typename T>
-    T& list<T>::at (Int pos)
+    inline T& list<T>::at (Int pos)
     {
         if (pos < 0 || pos >= _size)
             return *new T();
@@ -439,7 +439,7 @@ namespace Csv
     }
 
     template<typename T>
-    T list<T>::at (Int pos) const
+    inline T list<T>::at (Int pos) const
     {
         if (pos < 0 || pos >= _size)
             return T();
@@ -450,7 +450,7 @@ namespace Csv
     }
 
     template<typename T>
-    void list<T>::delete_at (Int pos)
+    inline void list<T>::delete_at (Int pos)
     {
         if (pos < 0 || pos >= _size)
             return;
@@ -463,13 +463,13 @@ namespace Csv
         --_size;
     }
 
-    table::table()
+    inline table::table()
     {
         rows = new plist();
         _num_rows = 0;
     }
 
-    void table::add_key (const multitype& e)
+    inline void table::add_key (const multitype& e)
     {
         if (has_key(e))
             return;
@@ -482,7 +482,7 @@ namespace Csv
         }
     }
 
-    void table::rm_key (const multitype& e)
+    inline void table::rm_key (const multitype& e)
     {
         for (Int i = 0; i < keys.size(); ++i)
             if (e.strict_equal(keys.at(i)))
@@ -498,12 +498,12 @@ namespace Csv
             }
     }
 
-    bool table::has_key (const multitype& e) const
+    inline bool table::has_key (const multitype& e) const
     {
         return get_key(e) != -1;
     }
 
-    Int table::get_key (const multitype& e) const
+    inline Int table::get_key (const multitype& e) const
     {
         for (Int i = 0; i < keys.size(); ++i)
             if (e.strict_equal(keys.at(i)))
@@ -511,12 +511,12 @@ namespace Csv
         return -1;
     }
 
-    list<multitype> table::get_keys() const
+    inline list<multitype> table::get_keys() const
     {
         return keys;
     }
 
-    void table::add_row()
+    inline void table::add_row()
     {
         plist *head = rows;
         while (head->next != nullptr)
@@ -526,7 +526,7 @@ namespace Csv
         ++_num_rows;
     }
 
-    void table::rm_row (Int row)
+    inline void table::rm_row (Int row)
     {
         if (row < 0 || row >= _num_rows)
             return;
@@ -539,12 +539,12 @@ namespace Csv
         --_num_rows;
     }
 
-    Int table::num_rows() const
+    inline Int table::num_rows() const
     {
         return _num_rows;
     }
 
-    list<multitype>& table::get_row (Int row)
+    inline list<multitype>& table::get_row (Int row)
     {
         if (row < 0 || row >= _num_rows)
             return *new list<multitype>();
@@ -554,7 +554,7 @@ namespace Csv
         return head->next->value;
     }
 
-    list<multitype> table::get_row (Int row) const
+    inline list<multitype> table::get_row (Int row) const
     {
         if (row < 0 || row >= _num_rows)
             return *new list<multitype>();
@@ -564,7 +564,7 @@ namespace Csv
         return head->next->value;
     }
 
-    list<multitype>& table::get_row_where (const multitype& key_search, const multitype& e)
+    inline list<multitype>& table::get_row_where (const multitype& key_search, const multitype& e)
     {
         Int key_id = get_key(key_search);
         if (key_id == -1)
@@ -579,7 +579,7 @@ namespace Csv
         return *new list<multitype>();
     }
 
-    list<multitype> table::get_row_where (const multitype& key_search, const multitype& e) const
+    inline list<multitype> table::get_row_where (const multitype& key_search, const multitype& e) const
     {
         Int key_id = get_key(key_search);
         if (key_id == -1)
@@ -594,7 +594,7 @@ namespace Csv
         return list<multitype>();
     }
 
-    multitype& table::get (Int row, const multitype& key)
+    inline multitype& table::get (Int row, const multitype& key)
     {
         if (row < 0 || row >= _num_rows)
             return *new multitype("bad_access");
@@ -605,7 +605,7 @@ namespace Csv
         return pos == -1 ? (*new multitype("bad_access")) : head->next->value.at(pos);
     }
 
-    multitype table::get (Int row, const multitype& key) const
+    inline multitype table::get (Int row, const multitype& key) const
     {
         if (row < 0 || row >= _num_rows)
             return multitype("bad_access");
@@ -616,7 +616,7 @@ namespace Csv
         return pos == -1 ? (*new multitype("bad_access")) : head->next->value.at(pos);
     }
 
-    multitype& table::get_where (const multitype& key_search, const multitype& e, const multitype& key_get)
+    inline multitype& table::get_where (const multitype& key_search, const multitype& e, const multitype& key_get)
     {
         Int key_sid = get_key(key_search),
             key_gid = get_key(key_get);
@@ -632,7 +632,7 @@ namespace Csv
         return *new multitype("bad_access");
     }
 
-    multitype table::get_where (const multitype& key_search, const multitype& e, const multitype& key_get) const
+    inline multitype table::get_where (const multitype& key_search, const multitype& e, const multitype& key_get) const
     {
         Int key_sid = get_key(key_search),
             key_gid = get_key(key_get);
@@ -648,7 +648,27 @@ namespace Csv
         return multitype("bad_access");
     }
 
-    Char csv_handler::csv_read_char()
+    inline bool table::del_row_where (const multitype& key_search, const multitype& e)
+    {
+        Int key_sid = get_key(key_search);
+        if (key_sid == -1)
+            return false;
+        plist *head = rows;
+        while (head->next != nullptr)
+        {
+            if (head->next->value.at(key_sid).equal(e))
+            {
+                plist *next = head->next->next;
+                delete[] head->next;
+                head->next = next;
+                return true;
+            }
+            head = head->next;
+        }
+        return false;
+    }
+
+    inline Char csv_handler::csv_read_char()
     {
         if (fptr == nullptr || feof(fptr))
             return '\0';
@@ -660,7 +680,7 @@ namespace Csv
         return ch;
     }
 
-    Char csv_handler::csv_break_line()
+    inline Char csv_handler::csv_break_line()
     {
         if (fptr == nullptr || feof(fptr))
             return '\0';
@@ -675,7 +695,7 @@ namespace Csv
         return '\0';
     }
 
-    Pchar csv_handler::csv_export_pchar()
+    inline Pchar csv_handler::csv_export_pchar()
     {
         Pchar ret = new Char[csv_str.size() + 1];
         Int i = 0;
@@ -685,24 +705,24 @@ namespace Csv
         return ret;
     }
 
-    csv_handler::csv_handler (const Pchar _filename)
+    inline csv_handler::csv_handler (const Pchar _filename)
     {
         _table = table();
         string_copy(_filename, filename);
         fptr = nullptr;
     }
 
-    bool csv_handler::init_read()
+    inline bool csv_handler::init_read()
     {
         return (fptr = fopen(filename, "r")) != nullptr;
     }
 
-    bool csv_handler::init_write()
+    inline bool csv_handler::init_write()
     {
         return (fptr = fopen(filename, "w")) != nullptr;
     }
 
-    void csv_handler::read_and_terminate (const Char delim)
+    inline void csv_handler::read_and_terminate (const Char delim)
     {
         if (fptr == nullptr)
             return;
@@ -764,7 +784,7 @@ namespace Csv
         terminate();
     }
 
-    void csv_handler::write_and_terminate (const Char delim)
+    inline void csv_handler::write_and_terminate (const Char delim)
     {
         if (fptr == nullptr)
             return;
@@ -793,17 +813,17 @@ namespace Csv
         terminate();
     }
 
-    void csv_handler::terminate()
+    inline void csv_handler::terminate()
     {
         fclose(fptr);
     }
 
-    table& csv_handler::get_table()
+    inline table& csv_handler::get_table()
     {
         return _table;
     }
 
-    table csv_handler::get_table() const
+    inline table csv_handler::get_table() const
     {
         return _table;
     }

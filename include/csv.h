@@ -210,6 +210,11 @@ namespace Csv
         // one is returned.
         multitype& get_where (const multitype& key_search, const multitype& e, const multitype& key_get);
         multitype  get_where (const multitype& key_search, const multitype& e, const multitype& key_get) const;
+
+        // delete the first found row where the value of the column named 'key_search' is 'e'.
+        // this function uses equal() to compare the values.
+        // this function returns TRUE if a row is found and deleted.
+        bool del_row_where (const multitype& key_search, const multitype& e);
     };
 
     // a csv file reader/writer. ONLY INITIALIZE THIS ONCE in the project and
