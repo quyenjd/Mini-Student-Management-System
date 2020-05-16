@@ -33,8 +33,7 @@ void deleteStudent(){
     }
     std::cout<<"Input id: ";
     multitype id;
-    //declare multitype
     student.get_table().get_row_where("Student ID",id);
-    student.get_table().rm_row(n);
+    student.get_table().del_row_where("Student ID",id);
 }
 }
