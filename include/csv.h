@@ -724,7 +724,7 @@ namespace Csv
         // delete the first found row where the value of the column named 'key_search' is 'e'.
         // this function uses equal() to compare the values.
         // this function returns TRUE if a row is found and deleted.
-        bool del_row_where (const multitype& key_search, const multitype& e)
+        bool rm_row_where (const multitype& key_search, const multitype& e)
         {
             Int key_sid = get_key(key_search);
             if (key_sid == -1)
@@ -737,6 +737,7 @@ namespace Csv
                     plist *next = head->next->next;
                     delete[] head->next;
                     head->next = next;
+                    --_num_rows;
                     return true;
                 }
                 head = head->next;
@@ -755,14 +756,20 @@ namespace Csv
         FILE *fptr;
 
         list<Char> csv_str;
+        bool formal_blank_line_flag = false;
         Char csv_read_char()
         {
             if (fptr == nullptr || feof(fptr))
                 return '\0';
             Int ch = fgetc(fptr);
             if (ch == EOF)
+            {
+                if (!formal_blank_line_flag)
+                    return '\n';
+                formal_blank_line_flag = true;
                 return '\0';
-            if (ch != '\n' && ch != '\r' && ch != '\t' && ch != '\v' && ch != '\a' && ch != '\b' && ch != '\f')
+            }
+            if (ch >= 32 && ch <= 126)
                 csv_str.push_back((Char)ch);
             return ch;
         }
@@ -804,6 +811,7 @@ namespace Csv
         // and vice versa.
         bool init_read()
         {
+            formal_blank_line_flag = false;
             return (fptr = fopen(filename, "r")) != nullptr;
         }
 
