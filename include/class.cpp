@@ -15,8 +15,14 @@ void deleteStudent(){
     int id;
     std::cout<<"Input id: ";
     std::cin>>id;
-    std::cout<<student.get_table().rm_row_where("Student ID",id);
-    std::cout<<student.get_table().get_key("Student ID");
+    student.get_table().rm_row_where("Student ID",id);
+    //Update "No" column
+    for (int i=0;i<=student.get_table().num_rows();i++)
+        student.get_table().get(i,"No").assign(i+1);
+    if (student.init_write()==false){
+        std::cout<<"Error!";
+        return;
+    }
     student.write_and_terminate(); //paste the table to the csv file
 }
 
@@ -50,6 +56,10 @@ void addStudent(){
     std::cin.ignore();
     std::cin.get(Class,'/n');
     student.get_table().get(student.get_table().num_rows()-1,"Class").assign(Class);
+    if (student.init_write()==false){
+        std::cout<<"Error!";
+        return;
+    }
     student.write_and_terminate(); //paste the table to the csv file
 }
 }
