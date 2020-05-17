@@ -5,7 +5,6 @@
 #include "csv.h"
 
 namespace classes{
-    void importStudent();
     void addStudent();
     void deleteStudent();
 }
