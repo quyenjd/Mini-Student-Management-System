@@ -6,5 +6,6 @@
 
 namespace classes{
     void addStudent();
-    void deleteStudent();
+    void removeStudent();
+    void editStudent();
 }
