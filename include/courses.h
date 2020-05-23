@@ -5,20 +5,28 @@ using namespace Csv;
 using namespace std;
 namespace SMS
 {
-    struct student {};
-    struct course
+
+    class student {
+    public:
+        multitype data[5];
+    };
+
+    class course
     {
-<<<<<<< Updated upstream
-        list<student*> s;
-        multitype no;
-=======
     public:
         list<student*> st;
         /*multitype no;
->>>>>>> Stashed changes
         multitype course_id,course_name,course_class;
-        multitype lec_user,lec_name,lec_degree,leg_gender;
+        multitype lec_user,lec_name,lec_degree,lec_gender;
         multitype st_date,en_date,day_of_week,st_hour,st_minute,en_hour,en_minute;
+        multitype room;*/
+
+        multitype data[16];
+        void add_student(student *&stud);
+        void view_student_list();
+        void add_student_to_course ();
+        bool check_student_in_course (student *stud);
+        void remove_student_from_course (student *&stud);
     };
 
 
@@ -27,8 +35,6 @@ namespace SMS
     {
     public:
         list<course*> c;
-<<<<<<< Updated upstream
-=======
         multitype semester_name;
 
         void import_course();
@@ -38,7 +44,7 @@ namespace SMS
         void set_course_data_manually(course *&crse); //set course data or update a course (edit a course)
         void delete_course (course *&crse);
         void view_course ();
->>>>>>> Stashed changes
+        void update_course (course *&crse);
     };
 
 
@@ -46,12 +52,6 @@ namespace SMS
     class academic_year
     {
     public:
-<<<<<<< Updated upstream
-        //constructor
-        academic_year();
-        list<semester*> s;
-        multitype school_year;
-=======
         list<semester*> s;
         multitype school_year;
         multitype get_school_year (); // get school year name multitype -> convert to_str() to print
@@ -59,32 +59,24 @@ namespace SMS
         void add_semester (semester *&sem);
         void delete_semester(semester *&sem);
         void view_semester();
->>>>>>> Stashed changes
     };
 
 
 
     class school
     {
-<<<<<<< Updated upstream
-    private:
-        list<academic_year*> a;
-=======
->>>>>>> Stashed changes
     public:
-        void add_year (multitype sch_year);
+        list<academic_year*> a;
 
-<<<<<<< Updated upstream
-=======
         void add_year (academic_year *y);
         void delete_academic_year (academic_year *&y);
         void view_academic_year();
->>>>>>> Stashed changes
     };
 
     course* create_course();
     semester* create_semester();
     academic_year* create_academic_year();
+    student* create_student();
 
 };
 #endif // COURSES_H

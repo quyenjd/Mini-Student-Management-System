@@ -5,26 +5,11 @@ using namespace std;
 namespace SMS
 {
 
-<<<<<<< Updated upstream
-    academic_year::academic_year()
-    {
-        for (int i=0;i<3;i++) s[i] = semester();
-    }
-
-    academic_year* create_academic_year() {
-=======
     academic_year* create_academic_year() {  //checked
->>>>>>> Stashed changes
         academic_year *y = new academic_year();
         return y;
     }
 
-<<<<<<< Updated upstream
-    void school::add_year(academic_year *y)
-    {
-        a.push_back(y);
-    }
-=======
     void school::add_year(academic_year *y){ //checked
         a.push_back(y);
     }
@@ -87,6 +72,14 @@ namespace SMS
     }
 
     void semester::add_course(course *crse) {   //checked
+        csv_handler course_file("19APCS1-Schedule.csv");
+        if (!course_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+        course_file.read_and_terminate();
+        table data_table=course_file.get_table();
+        crse->data[0]=data_table.num_rows()+1;
         c.push_back(crse);
     }
 
@@ -96,7 +89,7 @@ namespace SMS
         }
     }
 
-    void semester::import_course() { ////// student chua xong + loi
+    void semester::import_course() { ////// checked
         csv_handler course_file("19APCS1-Schedule.csv");
         if (!course_file.init_read()) {
             cout << "Error!";
@@ -105,17 +98,35 @@ namespace SMS
         course_file.read_and_terminate();
         table data_table=course_file.get_table();
 
-        for (int i=1;i<=data_table.num_rows();i++) {
+        csv_handler student_file("19APCS1-Student.csv");
+        if (!student_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+        student_file.read_and_terminate();
+        table *student_table=&student_file.get_table();
+
+        for (int i=0;i<data_table.num_rows();i++) {
             course* new_course=create_course();
-            for (int j=0;j<16;i++) {
+            add_course(new_course);
+            for (int j=0;j<16;j++) {
                 new_course->data[j]=data_table.get_row(i).at(j);
             }
-            add_course(new_course);
+
+            for (int j=0;j<student_table->num_rows();j++) {
+                if (student_table->get_row(j).at(4).equal(new_course->data[3])) {
+                    student* new_student=create_student();
+                    new_course->add_student(new_student);
+                    for (int k=0;k<5;k++) {
+                        new_student->data[k]=student_table->get_row(j).at(k);
+                    }
+                }
+            }
+
         }
     }
 
     void semester::set_course_data_manually (course *&crse) {   //checked
-        crse->data[0]=c.size();
         char id[100];
         cin.ignore();
         cout << "Enter Course ID: ";
@@ -211,16 +222,191 @@ namespace SMS
         course *new_course= new course();
         add_course(new_course);
         set_course_data_manually(new_course);
+
+        csv_handler course_file("19APCS1-Schedule.csv");
+        if (!course_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+        course_file.read_and_terminate();
+//        table data_table=course_file.get_table();
+
+        if (!course_file.init_write()) {
+            cout << "Error!";
+            return;
+        }
+        course_file.get_table().add_row();
+        for (int i=0;i<16;i++) {
+            course_file.get_table().get_row(course_file.get_table().num_rows()-1).at(i)=new_course->data[i];
+        }
+        course_file.write_and_terminate();
     }
 
     void semester::delete_course(course *&crse) { //checked
+        csv_handler course_file("19APCS1-Schedule.csv");
+        if (!course_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+        course_file.read_and_terminate();
+        table *data_table=&course_file.get_table();
+
+        if (!course_file.init_write()) {
+            cout << "Error!";
+            return;
+        }
+
         for (int i=0;i<c.size();i++) {
             if (c.at(i)==crse) {
+                data_table->rm_row_where("No",c.at(i)->data[0]);
                 c.delete_at(i);
                 break;
             }
         }
+        course_file.write_and_terminate();
     }
 
->>>>>>> Stashed changes
+    void semester::update_course(course *&crse) {   //checked
+        csv_handler course_file("19APCS1-Schedule.csv");
+        if (!course_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+        course_file.read_and_terminate();
+        table *data_table=&course_file.get_table();
+
+        if (!course_file.init_write()) {
+            cout << "Error!";
+            return;
+        }
+
+        for (int i=0;i<c.size();i++) {
+            if (c.at(i)==crse) {
+                set_course_data_manually(c.at(i));
+                for (int j=1;j<16;j++) {
+                    data_table->get_row_where("No",crse->data[0]).at(j)=c.at(i)->data[j];
+                }
+            }
+        }
+
+        course_file.write_and_terminate();
+    }
+
+    student* create_student() { //checked
+        student *stud= new student();
+        return stud;
+    }
+
+    void course::add_student(student *&stud) {  //checked
+        csv_handler student_file("19APCS1-Student.csv");
+        if (!student_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+        student_file.read_and_terminate();
+        table student_table=student_file.get_table();
+        stud->data[0]=student_table.num_rows()+1;
+        st.push_back(stud);
+    }
+
+    void course::view_student_list() {  //checked
+        cout << "List of students:"  << endl;
+        for (int i=0;i<st.size();i++) {
+            cout << "   " << st.at(i)->data[2].to_str() << "-" << st.at(i)->data[1].to_str();
+            cout << endl;
+        }
+    }
+
+    bool course::check_student_in_course(student *stud) {   //checked
+        for (int i=0;i<st.size();i++) {
+            if (stud->data[1].equal(st.at(i)->data[1])) return true;
+        }
+        return false;
+    }
+
+    void course::add_student_to_course() {  //checked
+        student *new_stud=create_student();
+
+        new_stud->data[0]=st.size()+1;
+
+        char id[15];
+        cout << "Student ID: ";
+        cin.ignore();
+        cin.get(id,15);
+        new_stud->data[1]=id;
+
+        if (check_student_in_course(new_stud)) {
+            cout << "This student was in this course, you cannot add anymore" << endl;
+            return;
+        } else {
+            char name[50];
+            cout << "Student Name: ";
+            cin.ignore();
+            cin.get(name,50);
+            new_stud->data[2]=name;
+
+            char  dob[15];
+            cout << "Date of Birth: ";
+            cin.ignore();
+            cin.get(dob,15);
+            new_stud->data[3]=dob;
+
+            char st_class[15];
+            cout << "Student class: ";
+            cin.ignore();
+            cin.get(st_class,15);
+            new_stud->data[4]=st_class;
+
+            add_student(new_stud);
+
+            csv_handler student_file("19APCS1-Student.csv");
+            if (!student_file.init_read()) {
+                cout << "Error!";
+                return;
+            }
+
+            student_file.read_and_terminate();
+            table *student_table=&student_file.get_table();
+            student_table->add_row();
+
+            if (!student_file.init_write()) {
+                cout << "Error!";
+                return;
+            }
+
+
+
+            for (int i=0;i<5;i++) {
+                student_table->get_row(student_table->num_rows()-1).at(i)=new_stud->data[i];
+            }
+            student_file.write_and_terminate();
+        }
+    }
+
+    void course::remove_student_from_course(student *&stud) {   //checked
+        csv_handler student_file("19APCS1-Student.csv");
+        if (!student_file.init_read()) {
+            cout << "Error!";
+            return;
+        }
+
+        student_file.read_and_terminate();
+        table *student_table=&student_file.get_table();
+
+        if (!student_file.init_write()) {
+            cout << "Error!";
+            return;
+        }
+
+        for (int i=0;i<st.size();i++) {
+            if (st.at(i)==stud) {
+                student_table->rm_row_where("No",st.at(i)->data[0]);
+                st.delete_at(i);
+                break;
+            }
+        }
+
+        student_file.write_and_terminate();
+
+    }
 };
