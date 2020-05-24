@@ -312,7 +312,7 @@ namespace SMS
     void course::view_student_list() {  //checked
         cout << "List of students:"  << endl;
         for (int i=0;i<st.size();i++) {
-            cout << "   " << st.at(i)->data[2].to_str() << "-" << st.at(i)->data[1].to_str();
+            cout << "   " << i+1 << "." << st.at(i)->data[2].to_str() << "-" << st.at(i)->data[1].to_str();
             cout << endl;
         }
     }
@@ -374,39 +374,175 @@ namespace SMS
                 return;
             }
 
-
-
             for (int i=0;i<5;i++) {
                 student_table->get_row(student_table->num_rows()-1).at(i)=new_stud->data[i];
             }
             student_file.write_and_terminate();
+
+            cout << "Added Successfully" << endl;
         }
     }
 
     void course::remove_student_from_course(student *&stud) {   //checked
-        csv_handler student_file("19APCS1-Student.csv");
-        if (!student_file.init_read()) {
-            cout << "Error!";
+        if (check_student_in_course(stud)) {
+            csv_handler student_file("19APCS1-Student.csv");
+            if (!student_file.init_read()) {
+                cout << "Error!";
+                return;
+            }
+
+            student_file.read_and_terminate();
+            table *student_table=&student_file.get_table();
+
+            if (!student_file.init_write()) {
+                cout << "Error!";
+                return;
+            }
+
+            for (int i=0;i<st.size();i++) {
+                if (st.at(i)==stud) {
+                    student_table->rm_row_where("No",st.at(i)->data[0]);
+                    st.delete_at(i);
+                    break;
+                }
+            }
+
+            student_file.write_and_terminate();
+        } else {
+            cout << "This student doesn't exist in this course !" << endl;
+            return;
+        }
+    }
+
+    void view_list_course_current(school *sch) { //checked
+        int k=sch->a.at(sch->a.size()-1)->s.at(sch->a.at(sch->a.size()-1)->s.size()-1)->c.size();
+
+        for (int i=0;i<k;i++) {
+            cout << "Course " << sch->a.at(sch->a.size()-1)->s.at(sch->a.at(sch->a.size()-1)->s.size()-1)->c.at(i)->data[2].to_str() << endl;
+        }
+    }
+
+    list<lecturer*> lect;
+
+    bool check_exist_lecturer_in_list(lecturer* new_lec) {  //checked
+        for (int i=0;i<lect.size();i++) {
+            if (new_lec->data[0].equal(lect.at(i)->data[0])) return true;
+        }
+        return false;
+    }
+
+    void create_lecturer_list() {   //checked
+        csv_handler course_file("19APCS1-Schedule.csv");
+
+        if (!course_file.init_read()) {
+            cout << "Error" << endl;
             return;
         }
 
-        student_file.read_and_terminate();
-        table *student_table=&student_file.get_table();
+        course_file.read_and_terminate();
+        table *data_table=&course_file.get_table();
+        for (int i=0;i<data_table->num_rows();i++) {
+            lecturer *new_lec=create_lecturer();
+            for (int j=0;j<4;j++) {
+                new_lec->data[j]=data_table->get_row(i).at(j+4);
+            }
+            if (!check_exist_lecturer_in_list(new_lec)) add_lecturer(new_lec);
+        }
+    }
 
-        if (!student_file.init_write()) {
-            cout << "Error!";
+    lecturer* create_lecturer() {   //checked
+        lecturer *new_lec = new lecturer();
+        return new_lec;
+    }
+    void add_lecturer(lecturer *new_lec) {  //checked
+        lect.push_back(new_lec);
+    }
+    void view_lecturer_list() { //checked
+        cout << "Lecturers list: " << endl;
+        for (int i=0;i<lect.size();i++) {
+            cout <<"    " << i+1 <<"." << lect.at(i)->data[1].to_str() << endl;
+        }
+    }
+
+    bool set_lecturer_data(lecturer *&new_lec) {    //checked
+        char l_user[100];
+        cin.ignore();
+        cout << "Enter Lecturer Username: ";
+        cin.get(l_user,100);
+        for (int i=0;i<lect.size();i++) {
+            if (lect.at(i)->data[0].equal(l_user)) return false;
+        }
+        new_lec->data[0]=l_user;
+
+        char l_name[100];
+        cin.ignore();
+        cout << "Enter Lecturer Name: ";
+        cin.get(l_name,100);
+        new_lec->data[1]=l_name;
+
+        char l_degree[100];
+        cin.ignore();
+        cout << "Enter Lecturer Degree: ";
+        cin.get(l_degree,100);
+        new_lec->data[2]=l_degree;
+
+        char l_gender[100];
+        cin.ignore();
+        cout << "Enter Lecturer Gender: ";
+        cin.get(l_gender,100);
+        new_lec->data[3]=l_gender;
+        return true;
+    }
+
+    void add_lecturer_manually() {  //checked
+        lecturer *new_lec=create_lecturer();
+        if (set_lecturer_data(new_lec))
+        {
+            add_lecturer(new_lec);
+            cout << "Added Successfully" << endl;
+        }
+        else cout << "This lecturer was in this list before" << endl;
+    }
+
+    void update_lecturer(lecturer *&new_lec) {  //checked
+        multitype temp=new_lec->data[0];
+        bool check=set_lecturer_data(new_lec);
+        if (check) return;
+        else if (!check && new_lec->data[0].equal(temp) ) {
+            char l_name[100];
+            cin.ignore();
+            cout << "Enter Lecturer Name: ";
+            cin.get(l_name,100);
+            new_lec->data[1]=l_name;
+
+            char l_degree[100];
+            cin.ignore();
+            cout << "Enter Lecturer Degree: ";
+            cin.get(l_degree,100);
+            new_lec->data[2]=l_degree;
+
+            char l_gender[100];
+            cin.ignore();
+            cout << "Enter Lecturer Gender: ";
+            cin.get(l_gender,100);
+            new_lec->data[3]=l_gender;
+        } else if (!check && !new_lec->data[0].equal(temp)){
+            cout << "This lecturer was in this list before. Please try again" << endl;
             return;
         }
+    }
 
-        for (int i=0;i<st.size();i++) {
-            if (st.at(i)==stud) {
-                student_table->rm_row_where("No",st.at(i)->data[0]);
-                st.delete_at(i);
+    void delete_lecturer(lecturer *&new_lec) {
+        if (!check_exist_lecturer_in_list(new_lec)) {
+            cout << "This lecturer was not in this list" << endl;
+            return;
+        }
+        for (int i=0;i<lect.size();i++) {
+            if (lect.at(i)==new_lec) {
+                lect.delete_at(i);
+                cout << "Removed Lecturer Successfully" << endl;
                 break;
             }
         }
-
-        student_file.write_and_terminate();
-
     }
 };
