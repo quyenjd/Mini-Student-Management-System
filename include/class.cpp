@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <iostream>
 #include "class.h"
+#include <string>
 
 namespace classes{
 
@@ -15,6 +16,7 @@ void removeStudent(){
     int id;
     std::cout<<"Input id: ";
     std::cin>>id;
+    std::cin.ignore();
     student.get_table().rm_row_where("Student ID",id);
     //Update "No" column
     for (int i=0;i<=student.get_table().num_rows();i++)
@@ -55,6 +57,7 @@ void addStudent(){
     std::cout<<"Insert class: ";
     std::cin.ignore();
     std::cin.get(Class,'/n');
+    std::cin.ignore();
     student.get_table().get(student.get_table().num_rows()-1,"Class").assign(Class);
     if (student.init_write()==false){
         std::cout<<"Error!";
@@ -86,6 +89,7 @@ void editStudent(){
         std::cout<<"Insert Student ID: ";
         std::cin>>id;
         student.get_table().get(no-1,"Student ID").assign(id);
+        std::cin.ignore();
     }
     if (num==2){
         char* fullname=new char[30];
@@ -93,6 +97,7 @@ void editStudent(){
         std::cin.ignore();
         std::cin.get(fullname,'/n');
         student.get_table().get(no-1,"Fullname").assign(fullname);
+        std::cin.ignore();
     }
     if (num==3){
         char* dob=new char[30];
@@ -100,6 +105,7 @@ void editStudent(){
         std::cin.ignore();
         std::cin.get(dob,'/n');
         student.get_table().get(no-1,"DoB").assign(dob);
+        std::cin.ignore();
     }
     if (num==4){
         char* Class=new char[30];
@@ -107,12 +113,31 @@ void editStudent(){
         std::cin.ignore();
         std::cin.get(Class,'/n');
         student.get_table().get(no-1,"Class").assign(Class);
+        std::cin.ignore();
     }
     if (student.init_write()==false){
         std::cout<<"Error!";
         return;
     }
     student.write_and_terminate(); //paste the table to the csv file
+}
+
+void viewStudentInClass(){
+    using namespace Csv;
+    csv_handler student("19APCS1-Student.csv");
+    if (student.init_read()==false){
+        std::cout<<"Error!";
+        return;
+    }
+    student.read_and_terminate();
+    std::cout<<"Select the class: ";
+    char* s=new char[30];
+    std::cin.get(s,'\n');
+    for (int i=0;i<student.get_table().num_rows();i++){
+        if (strcmp(student.get_table().get(i,"Class").to_str(),s)==0){
+             std::cout<<student.get_table().get(i,"Fullname").to_str()<<std::endl;
+        }
+    }
 }
 }
 

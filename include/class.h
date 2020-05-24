@@ -8,4 +8,5 @@ namespace classes{
     void addStudent();
     void removeStudent();
     void editStudent();
+    void viewStudentInClass();
 }
