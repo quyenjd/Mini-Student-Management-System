@@ -26,6 +26,20 @@ void removeStudent(){
         return;
     }
     student.write_and_terminate(); //paste the table to the csv file
+    csv_handler idpass("idpass.csv");
+    if (idpass.init_read()==false){
+        std::cout<<"Error!";
+        return;
+    }
+    idpass.read_and_terminate();
+    idpass.get_table().rm_row_where("ID",id);
+    for (int i=0;i<=idpass.get_table().num_rows();i++)
+        idpass.get_table().get(i,"No").assign(i+1);
+    if (idpass.init_write()==false){
+        std::cout<<"Error!";
+        return;
+    }
+    idpass.write_and_terminate();
 }
 
 void addStudent(){
