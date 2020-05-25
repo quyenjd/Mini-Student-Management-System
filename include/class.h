@@ -9,4 +9,5 @@ namespace classes{
     void removeStudent();
     void editStudent();
     void viewStudentInClass();
+    void updateIDPass();
 }

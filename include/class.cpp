@@ -64,6 +64,31 @@ void addStudent(){
         return;
     }
     student.write_and_terminate(); //paste the table to the csv file
+    csv_handler idpass("idpass.csv");
+    if (idpass.init_read()==false){
+        std::cout<<"Error!";
+        return;
+    }
+    idpass.read_and_terminate();
+    idpass.get_table().add_row();
+    idpass.get_table().get(idpass.get_table().num_rows()-1,"No").assign(idpass.get_table().num_rows());
+    idpass.get_table().get(idpass.get_table().num_rows()-1,"ID").assign(student.get_table().get(student.get_table().num_rows()-1,"Student ID").to_str());
+    char* dobb=new char[20];
+    char* temp=new char[20];
+    temp=student.get_table().get(student.get_table().num_rows()-1,"DoB").to_str();
+    int j=0;
+    for (int i=0;i<strlen(temp);i++){
+        if (temp[i]!='/'){
+            dobb[j]=temp[i];
+            j++;
+        }
+    }
+    idpass.get_table().get(idpass.get_table().num_rows()-1,"Pass").assign(dobb);
+    if (idpass.init_write()==false){
+        std::cout<<"Error!";
+        return;
+    }
+    idpass.write_and_terminate();
 }
 
 void editStudent(){
@@ -137,6 +162,43 @@ void viewStudentInClass(){
         if (strcmp(student.get_table().get(i,"Class").to_str(),s)==0){
              std::cout<<student.get_table().get(i,"Fullname").to_str()<<std::endl;
         }
+    }
+}
+
+void updateIDPass(){
+    using namespace Csv;
+    csv_handler student("19APCS1-Student.csv");
+    if (student.init_read()==false){
+        std::cout<<"Error!";
+        return;
+    }
+    student.read_and_terminate();
+    for (int i=0;i<student.get_table().num_rows();i++){
+        csv_handler idpass("idpass.csv");
+        if (idpass.init_read()==false){
+            std::cout<<"Error!";
+            return;
+        }
+        idpass.read_and_terminate();
+        idpass.get_table().add_row();
+        idpass.get_table().get(idpass.get_table().num_rows()-1,"No").assign(idpass.get_table().num_rows());
+        idpass.get_table().get(idpass.get_table().num_rows()-1,"ID").assign(student.get_table().get(i,"Student ID").to_str());
+        char* dob=new char[20];
+        char* temp=new char[20];
+        temp=student.get_table().get(i,"DoB").to_str();
+        int j=0;
+        for (int i=0;i<strlen(temp);i++){
+            if (temp[i]!='/'){
+                dob[j]=temp[i];
+                j++;
+            }
+        }
+        idpass.get_table().get(idpass.get_table().num_rows()-1,"Pass").assign(dob);
+        if (idpass.init_write()==false){
+            std::cout<<"Error!";
+            return;
+        }
+        idpass.write_and_terminate();
     }
 }
 }
