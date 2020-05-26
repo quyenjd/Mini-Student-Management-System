@@ -87,6 +87,7 @@ void addStudent(){
     idpass.get_table().add_row();
     idpass.get_table().get(idpass.get_table().num_rows()-1,"No").assign(idpass.get_table().num_rows());
     idpass.get_table().get(idpass.get_table().num_rows()-1,"ID").assign(student.get_table().get(student.get_table().num_rows()-1,"Student ID").to_str());
+    idpass.get_table().get(idpass.get_table().num_rows()-1,"Role").assign("Student");
     char* dobb=new char[20];
     char* temp=new char[20];
     temp=student.get_table().get(student.get_table().num_rows()-1,"DoB").to_str();
@@ -197,6 +198,7 @@ void updateIDPass(){
         idpass.get_table().add_row();
         idpass.get_table().get(idpass.get_table().num_rows()-1,"No").assign(idpass.get_table().num_rows());
         idpass.get_table().get(idpass.get_table().num_rows()-1,"ID").assign(student.get_table().get(i,"Student ID").to_str());
+        idpass.get_table().get(idpass.get_table().num_rows()-1,"Role").assign("Student");
         char* dob=new char[20];
         char* temp=new char[20];
         temp=student.get_table().get(i,"DoB").to_str();
