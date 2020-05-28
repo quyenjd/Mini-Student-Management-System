@@ -3,3 +3,4 @@
 !*.cpp
 !*.h
 !.gitignore
+!*.csv
