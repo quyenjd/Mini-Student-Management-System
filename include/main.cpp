@@ -72,13 +72,17 @@ void changePass(){
 		if (pass[i] == '\0' || pass2[i] == '\0') break;
 	}
 	if (checkPass) {
-		csv_handler student("19APCS1-Student.csv");
+		csv_handler student("idpass.csv");
 		if (!student.init_read()) {
 			cout << "Error!";
 			return;
 		}
 		student.read_and_terminate();
 		student.get_table().get_row_where("ID", info.user).at(2).assign(pass);
+		if (!student.init_write()) {
+			cout << "Error!";
+			return;
+		}
 		student.write_and_terminate();
 		cout << endl << "                 YOU HAVE SUCCESSFULLY CHANGED YOUR PASSWORD" << endl;
 		userLogout();
