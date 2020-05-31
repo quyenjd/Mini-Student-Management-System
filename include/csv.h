@@ -634,7 +634,7 @@ namespace Csv
         // this function uses equal() to compare the values.
         // if there are multiple rows satisfying the condition, only the first valid
         // one is returned.
-        list<multitype>& get_row_where (const multitype& key_search, const multitype& e)
+        list<multitype>& get_row_where (const multitype& key_search, const multitype& e, bool strict = false)
         {
             Int key_id = get_key(key_search);
             if (key_id == -1)
@@ -642,13 +642,13 @@ namespace Csv
             plist *head = rows;
             while (head->next != nullptr)
             {
-                if (head->next->value.at(key_id).equal(e))
+                if (strict ? head->next->value.at(key_id).strict_equal(e) : head->next->value.at(key_id).equal(e))
                     return head->next->value;
                 head = head->next;
             }
             return *new list<multitype>();
         }
-        list<multitype> get_row_where (const multitype& key_search, const multitype& e) const
+        list<multitype> get_row_where (const multitype& key_search, const multitype& e, bool strict = false) const
         {
             Int key_id = get_key(key_search);
             if (key_id == -1)
@@ -656,7 +656,7 @@ namespace Csv
             plist *head = rows;
             while (head->next != nullptr)
             {
-                if (head->next->value.at(key_id).equal(e))
+                if (strict ? head->next->value.at(key_id).strict_equal(e) : head->next->value.at(key_id).equal(e))
                     return head->next->value;
                 head = head->next;
             }
@@ -687,10 +687,9 @@ namespace Csv
 
         // get the value of the column named 'key_get' on the row where there is
         // a column named 'key_search' that has the value of 'e'.
-        // this function uses equal() to compare the values.
         // if there are multiple rows satisfying the condition, only the first valid
         // one is returned.
-        multitype& get_where (const multitype& key_search, const multitype& e, const multitype& key_get)
+        multitype& get_where (const multitype& key_search, const multitype& e, const multitype& key_get, bool strict = false)
         {
             Int key_sid = get_key(key_search),
                 key_gid = get_key(key_get);
@@ -699,13 +698,13 @@ namespace Csv
             plist *head = rows;
             while (head->next != nullptr)
             {
-                if (head->next->value.at(key_sid).equal(e))
+                if (strict ? head->next->value.at(key_sid).strict_equal(e) : head->next->value.at(key_sid).equal(e))
                     return head->next->value.at(key_gid);
                 head = head->next;
             }
             return *new multitype("bad_access");
         }
-        multitype get_where (const multitype& key_search, const multitype& e, const multitype& key_get) const
+        multitype get_where (const multitype& key_search, const multitype& e, const multitype& key_get, bool strict = false) const
         {
             Int key_sid = get_key(key_search),
                 key_gid = get_key(key_get);
@@ -714,7 +713,7 @@ namespace Csv
             plist *head = rows;
             while (head->next != nullptr)
             {
-                if (head->next->value.at(key_sid).equal(e))
+                if (strict ? head->next->value.at(key_sid).strict_equal(e) : head->next->value.at(key_sid).equal(e))
                     return head->next->value.at(key_gid);
                 head = head->next;
             }
@@ -724,7 +723,7 @@ namespace Csv
         // delete the first found row where the value of the column named 'key_search' is 'e'.
         // this function uses equal() to compare the values.
         // this function returns TRUE if a row is found and deleted.
-        bool rm_row_where (const multitype& key_search, const multitype& e)
+        bool rm_row_where (const multitype& key_search, const multitype& e, bool strict = false)
         {
             Int key_sid = get_key(key_search);
             if (key_sid == -1)
@@ -732,7 +731,7 @@ namespace Csv
             plist *head = rows;
             while (head->next != nullptr)
             {
-                if (head->next->value.at(key_sid).equal(e))
+                if (strict ? head->next->value.at(key_sid).strict_equal(e) : head->next->value.at(key_sid).equal(e))
                 {
                     plist *next = head->next->next;
                     delete[] head->next;
