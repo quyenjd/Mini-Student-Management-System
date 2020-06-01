@@ -57,3 +57,47 @@ void readline (std::istream& in, multitype& e)
         str[i++] = buf.pop_front();
     e.assign(str);
 }
+
+void Interface::print_table (const table& Table,
+                             const multitype& Table_head,
+                             bool clrscr,
+                             std::ostream& out)
+{
+    if (clrscr)
+        system("cls"); // windows only
+    out << "[ TABLE: " << Table_head << " ]" << std::endl
+        << std::endl
+        << "----" << std::endl;
+
+    list<int> maxl;
+    int Ncols = Table.get_keys().size(),
+        Nrows = Table.num_rows();
+    for (int i = 0; i < Ncols; ++i)
+        maxl.push_back(strlen(Table.get_keys().at(i).to_str()));
+    for (int i = 0; i < Nrows; ++i)
+        for (int j = 0; j < Ncols; ++j)
+            maxl.at(j) = Max(maxl.at(j), (int)strlen(Table.get_row(i).at(j).to_str()));
+
+    // write
+    for (int i = 0; i < Ncols; ++i)
+    {
+        multitype e = Table.get_keys().at(i);
+        out << e << " ";
+        for (int j = 0; j < maxl.at(i) - (int)strlen(e.to_str()); ++j)
+            out << " ";
+    }
+    out << std::endl;
+    for (int i = 0; i < Nrows; ++i)
+    {
+        for (int j = 0; j < Ncols; ++j)
+        {
+            multitype e = Table.get_row(i).at(j);
+            out << e << " ";
+            for (int j = 0; j < maxl.at(i) - (int)strlen(e.to_str()); ++j)
+                out << " ";
+        }
+        out << std::endl;
+    }
+    out << "----" << std::endl
+        << std::endl;
+}

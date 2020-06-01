@@ -21,6 +21,11 @@ extern void readline (std::istream& in, multitype& e);
 
 namespace Interface
 {
+    extern void print_table (const table& Table,
+                             const multitype& Table_head = "No title",
+                             bool clrscr = true,
+                             std::ostream& out = std::cout);
+
     class select_menu
     {
     private:
@@ -33,6 +38,7 @@ namespace Interface
         {
             items.add_key("No");
             items.add_key("Description");
+            title.assign("No title");
         }
 
         // add an item to the menu.
@@ -62,7 +68,7 @@ namespace Interface
         {
             if (clrscr)
                 system("cls"); // windows only
-            out << "[ SELECT: " << title.to_str() << " ]" << std::endl
+            out << "[ SELECT: " << title << " ]" << std::endl
                 << std::endl
                 << "----" << std::endl;
             int maxl = 0;
@@ -70,10 +76,10 @@ namespace Interface
                 maxl = Max(maxl, (int)strlen(items.get(i, "No").to_str()));
             for (int i = 0; i < items.num_rows(); ++i)
             {
-                out << "  " << items.get(i, "No").to_str() << ". ";
+                out << "  " << items.get(i, "No") << ". ";
                 for (int j = 0; j < maxl - (int)strlen(items.get(i, "No").to_str()); ++j)
                     out << " ";
-                out << items.get(i, "Description").to_str() << std::endl;
+                out << items.get(i, "Description") << std::endl;
             }
             out << "----" << std::endl;
 
@@ -103,6 +109,7 @@ namespace Interface
         {
             items.add_key("Description");
             items.add_key("Line input");
+            title.assign("No title");
         }
 
         // add an item to the menu.
@@ -134,7 +141,7 @@ namespace Interface
         {
             if (clrscr)
                 system("cls"); // windows only
-            out << "[ INPUT: " << title.to_str() << " ]" << std::endl
+            out << "[ INPUT: " << title << " ]" << std::endl
                 << std::endl
                 << "----" << std::endl;
 
@@ -145,7 +152,7 @@ namespace Interface
             for (int i = 0; i < items.num_rows(); ++i)
             {
                 multitype e;
-                out << "  " << items.get(i, "Description").to_str() << "  ";
+                out << "  " << items.get(i, "Description") << "  ";
                 for (int j = 0; j < maxl - (int)strlen(items.get(i, "Description").to_str()); ++j)
                     out << " ";
                 if (items.get(i, "Line input").to_int())

@@ -40,10 +40,10 @@ namespace Csv
             Pchar  _tpchar;
             Double _tdouble;
         } values;
-        char* _type;
+        Pchar _type;
 
     public:
-        // constructors
+        // constructors.
         multitype()
         {
             init();
@@ -151,9 +151,23 @@ namespace Csv
             return *this;
         }
 
+        // append e.to_str() to the end of this->to_str().
+        // this changes the type of 'this' to "str".
+        multitype& append (const multitype& e)
+        {
+            Char *cur = to_str(),
+                 *app = e.to_str(),
+                 *res = new Char[strlen(cur) + strlen(app) + 1];
+            Int j = 0;
+            for (Int i = 0; i < (Int)strlen(cur); res[j++] = cur[i++]);
+            for (Int i = 0; i < (Int)strlen(app); res[j++] = app[i++]);
+            assign(res);
+            return *this;
+        }
+
         // get type of current value. returns "int", "long", "char", "str", "double"
         // or "unknown" (default).
-        char* type() const
+        Pchar type() const
         {
             return _type;
         }
@@ -252,19 +266,19 @@ namespace Csv
         {
             if (is_type("int"))
             {
-                Char *buf = new char[STR_BUFFER];
+                Pchar buf = new Char[STR_BUFFER];
                 snprintf(buf, STR_BUFFER, "%d", values._tint);
                 return buf;
             }
             if (is_type("long"))
             {
-                Char *buf = new char[STR_BUFFER];
+                Pchar buf = new Char[STR_BUFFER];
                 snprintf(buf, STR_BUFFER, "%" PRId64, values._tlong);
                 return buf;
             }
             if (is_type("char"))
             {
-                Char *buf = new char[2];
+                Pchar buf = new Char[2];
                 buf[0] = values._tchar;
                 return buf;
             }
@@ -272,11 +286,32 @@ namespace Csv
                 return values._tpchar;
             if (is_type("double"))
             {
-                Char *buf = new char[STR_BUFFER];
-                snprintf(buf, STR_BUFFER, "%.15f", values._tdouble);
+                Pchar buf = new Char[STR_BUFFER];
+                snprintf(buf, STR_BUFFER, "%.10f", values._tdouble);
+
+                // trim trailing zeroes
+                char *p = strchr(buf, '.');
+                int count;
+
+                if (p != NULL)
+                {
+                    count = 10;
+                    while (count >= 0)
+                    {
+                         --count;
+                         if (*p == '\0')
+                             break;
+                         ++p;
+                    }
+                    *p-- = '\0';
+                    while (*p == '0')
+                        *p-- = '\0';
+                    if (*p == '.')
+                        *p = '\0';
+                }
                 return buf;
             }
-            return new char;
+            return new Char;
         }
 
         // convert current value (of any type) to double.
