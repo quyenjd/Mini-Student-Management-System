@@ -10,7 +10,7 @@ void userLogout();
 void menu();
 
 struct StudentInfo {
-	bool isStudent = true;
+	int role = -1;
 	char* user = new char[20];
 	char* pass = new char[20];
 	string fullName, dob, classID;
@@ -38,7 +38,9 @@ bool checkLogin(){
 	student.read_and_terminate();
 	if (!student.get_table().get_row_where("ID", info.user).empty() && student.get_table().get_row_where("ID", info.user).at(2).equal(info.pass))
 	{
-		if (!student.get_table().get_row_where("ID", info.user).at(3).equal("Student")) info.isStudent = false;
+		if (!student.get_table().get_row_where("ID", info.user).at(3).equal("Student")) info.role = 2;
+		else if (!student.get_table().get_row_where("ID", info.user).at(3).equal("Lecturer")) info.role = 1;
+		else if (!student.get_table().get_row_where("ID", info.user).at(3).equal("Staff")) info.role = 0;
 		loadProfileInfo(info);
 		return true;
 	}else return false;
@@ -53,7 +55,19 @@ void profileInfo() {
 	cout << endl << "      Full name: " + info.fullName;
 	cout << endl << "      Date of birth: " + info.dob;
 	cout << endl << "      Class: " + info.classID;
-	cout << endl << "      Role: " << (info.isStudent ? "Student" : "Teacher") << endl;
+	cout << endl << "      Role: ";
+	switch (info.role) {
+	case 0:
+		cout << "Staff";
+		break;
+	case 1:
+		cout << "Lecturer";
+		break;
+	case 2:
+		cout << "Student";
+		break;
+	}
+	cout << endl;
 	cout << endl << "              Continue using the application? (y/n)";
 	char ans = '1';
 	while (ans != 'y' && ans != 'n') cin >> ans;
@@ -110,13 +124,39 @@ void menu(){
     cout<<"                  W E L C O M E "<<getName()<<endl;
     cout<<"      1. Your profile information"<<endl;
     cout<<"      2. Change your password"<<endl;
-    cout<<"      3. Logout"<<endl;
+	cout << "      3. ";
+	switch (info.role) {
+	case 0:
+		cout << "Staff";
+		break;
+	case 1:
+		cout << "Lecturer";
+		break;
+	case 2:
+		cout << "Student";
+		break;
+	}
+	cout << " Operations"<<endl;
+    cout<<"      4. Logout"<<endl;
     cout<<endl<<"Choose your option: ";
     int i = -1;
     while(i > 3 || i < 0) cin>>i;
     if(i == 1) profileInfo();
     else if(i == 2) changePass();
-    else if(i == 3) userLogout();
+	else if (i == 3) {
+		switch (info.role) {
+		case 0:
+			staffOperations();
+			break;
+		case 1:
+			lecturerOperations();
+			break;
+		case 2:
+			studentOperations();
+			break;
+		}
+	}
+	else if (i == 4) userLogout();
 }
 
 void loginPanel() {
