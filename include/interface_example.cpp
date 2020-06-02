@@ -2,14 +2,25 @@
 #include "interface.h"
 
 using namespace std;
+using namespace Csv;
+
+bool filter (multitype column, list<multitype> row, table tabl)
+{
+    return column.equal("Student ID") || column.equal("No") || column.equal("Fullname");
+}
 
 int main()
 {
+    csv_handler csv("19APCS1-Student.csv");
+    csv.init_read();
+    csv.read_and_terminate();
+    Interface::print_table(csv.get_table().filter(filter), "Students");
+
     Interface::input_menu menu;
     menu.set_title("Name and Age");
     menu.add_item("Your name", true);
     menu.add_item("Your age", false);
-    list<multitype> res = menu.print_menu_and_wait();
+    list<multitype> res = menu.print_menu_and_wait(false);
 
     Interface::select_menu menu2;
     menu2.set_title("Increase/Decrease Age");
@@ -40,5 +51,6 @@ int main()
 
     cout << "Name: " << res.at(0) << endl
          << "Age:  " << res.at(1) << endl;
+
     return 0;
 }

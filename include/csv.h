@@ -287,7 +287,7 @@ namespace Csv
             if (is_type("double"))
             {
                 Pchar buf = new Char[STR_BUFFER];
-                snprintf(buf, STR_BUFFER, "%.10f", values._tdouble);
+                snprintf(buf, STR_BUFFER, "%.15f", values._tdouble);
 
                 // trim trailing zeroes
                 char *p = strchr(buf, '.');
@@ -777,6 +777,37 @@ namespace Csv
                 head = head->next;
             }
             return false;
+        }
+
+        // create a new table out of the current one using a filter function.
+        // the filter function must take 2 parameters:       [multitype] column_name,
+        //                                             [list<multitype>] current_row,
+        //                                                       [table] this_table.
+        // the filter function is called on every cell. if true is returned,
+        // the cell will exist in the new table.
+        table filter (bool(*_filter_func)(multitype, list<multitype>, table)) const
+        {
+            int Nkeys = get_keys().size(),
+                Nrows = num_rows();
+            bool markRow[Nrows], markCol[Nkeys];
+            memset(markRow, 0, sizeof markRow);
+            memset(markCol, 0, sizeof markCol);
+            for (int i = 0; i < Nrows; ++i)
+                for (int j = 0; j < Nkeys; ++j)
+                    if (_filter_func(get_keys().at(j), get_row(i), (*this)))
+                        markRow[i] = markCol[j] = true;
+            table new_table;
+            for (int i = 0; i < Nkeys; ++i)
+                if (markCol[i])
+                    new_table.add_key(get_keys().at(i));
+            for (int i = 0; i < Nrows; ++i)
+                if (markRow[i])
+                {
+                    new_table.add_row();
+                    for (int j = 0; j < Nkeys; ++j)
+                        new_table.get(new_table.num_rows() - 1, get_keys().at(j)) = get_row(i).at(j);
+                }
+            return new_table;
         }
     };
 

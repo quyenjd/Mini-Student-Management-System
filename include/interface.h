@@ -8,19 +8,19 @@
 
 #define Max(a,b) ((a)>(b)?(a):(b))
 
-using namespace Csv;
-
 // overload operator>> (read) for multitype.
-extern std::istream& operator>> (std::istream& in, multitype& e);
+extern std::istream& operator>> (std::istream& in, Csv::multitype& e);
 
 // overload operator<< (write) for multitype.
-extern std::ostream& operator<< (std::ostream& out, const multitype& e);
+extern std::ostream& operator<< (std::ostream& out, const Csv::multitype& e);
 
 // getline for multitype.
-extern void readline (std::istream& in, multitype& e);
+extern void readline (std::istream& in, Csv::multitype& e);
 
 namespace Interface
 {
+    using namespace Csv;
+
     extern void print_table (const table& Table,
                              const multitype& Table_head = "No title",
                              bool clrscr = true,
@@ -69,8 +69,9 @@ namespace Interface
             if (clrscr)
                 system("cls"); // windows only
             out << "[ SELECT: " << title << " ]" << std::endl
-                << std::endl
-                << "----" << std::endl;
+                << "____" << std::endl
+                << std::endl;
+
             int maxl = 0;
             for (int i = 0; i < items.num_rows(); ++i)
                 maxl = Max(maxl, (int)strlen(items.get(i, "No").to_str()));
@@ -81,7 +82,7 @@ namespace Interface
                     out << " ";
                 out << items.get(i, "Description") << std::endl;
             }
-            out << "----" << std::endl;
+            out << "____" << std::endl;
 
             // wait for user to choose
             while (true)
@@ -142,8 +143,8 @@ namespace Interface
             if (clrscr)
                 system("cls"); // windows only
             out << "[ INPUT: " << title << " ]" << std::endl
-                << std::endl
-                << "----" << std::endl;
+                << "____" << std::endl
+                << std::endl;
 
             list<multitype> res;
             int maxl = 0;
@@ -161,7 +162,7 @@ namespace Interface
                     std::cin >> e;
                 res.push_back(e);
             }
-            out << "----" << std::endl
+            out << "____" << std::endl
                 << std::endl;
 
             return res;

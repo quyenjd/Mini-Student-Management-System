@@ -1,6 +1,6 @@
 #include "interface.h"
 
-std::istream& operator>> (std::istream& in, multitype& e)
+std::istream& operator>> (std::istream& in, Csv::multitype& e)
 {
     std::istream::sentry cerberos(in);
     if (cerberos)
@@ -10,7 +10,7 @@ std::istream& operator>> (std::istream& in, multitype& e)
         if (it != end)
         {
             std::ctype<char> const& ctype(std::use_facet<std::ctype<char> >(in.getloc()));
-            list<char> buf;
+            Csv::list<char> buf;
             for (; it != end && !ctype.is(std::ctype_base::space, *it); ++it)
                 buf.push_back(*it);
 
@@ -28,15 +28,15 @@ std::istream& operator>> (std::istream& in, multitype& e)
     return in;
 }
 
-std::ostream& operator<< (std::ostream& out, const multitype& e)
+std::ostream& operator<< (std::ostream& out, const Csv::multitype& e)
 {
     return out << e.to_str();
 }
 
-void readline (std::istream& in, multitype& e)
+void readline (std::istream& in, Csv::multitype& e)
 {
     char c;
-    list<char> buf;
+    Csv::list<char> buf;
 
     e.init();
     while (true)
@@ -66,8 +66,8 @@ void Interface::print_table (const table& Table,
     if (clrscr)
         system("cls"); // windows only
     out << "[ TABLE: " << Table_head << " ]" << std::endl
-        << std::endl
-        << "----" << std::endl;
+        << "____" << std::endl
+        << std::endl;
 
     list<int> maxl;
     int Ncols = Table.get_keys().size(),
@@ -82,9 +82,16 @@ void Interface::print_table (const table& Table,
     for (int i = 0; i < Ncols; ++i)
     {
         multitype e = Table.get_keys().at(i);
-        out << e << " ";
+        out << e << "  ";
         for (int j = 0; j < maxl.at(i) - (int)strlen(e.to_str()); ++j)
             out << " ";
+    }
+    out << std::endl;
+    for (int i = 0; i < Ncols; ++i)
+    {
+        for (int j = 0; j < maxl.at(i); ++j)
+            out << "-";
+        out << "  ";
     }
     out << std::endl;
     for (int i = 0; i < Nrows; ++i)
@@ -92,12 +99,12 @@ void Interface::print_table (const table& Table,
         for (int j = 0; j < Ncols; ++j)
         {
             multitype e = Table.get_row(i).at(j);
-            out << e << " ";
-            for (int j = 0; j < maxl.at(i) - (int)strlen(e.to_str()); ++j)
+            out << e << "  ";
+            for (int k = 0; k < maxl.at(j) - (int)strlen(e.to_str()); ++k)
                 out << " ";
         }
         out << std::endl;
     }
-    out << "----" << std::endl
+    out << "____" << std::endl
         << std::endl;
 }
