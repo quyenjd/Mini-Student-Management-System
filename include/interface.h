@@ -9,6 +9,7 @@
 #define Max(a,b) ((a)>(b)?(a):(b))
 
 // overload operator>> (read) for multitype.
+// after this operation, multitype always has the type of "str".
 extern std::istream& operator>> (std::istream& in, Csv::multitype& e);
 
 // overload operator<< (write) for multitype.
@@ -87,7 +88,8 @@ namespace Interface
             // wait for user to choose
             while (true)
             {
-                out << "Your choice: ";
+                out << std::endl
+                    << "Your choice: ";
                 multitype choice; std::cin >> choice;
                 if (!items.get_where("No", choice, "No").equal("bad_access"))
                 {

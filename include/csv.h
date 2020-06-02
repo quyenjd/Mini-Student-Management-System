@@ -407,7 +407,7 @@ namespace Csv
 
         void destroy_util (iter *root)
         {
-            if (root->next != nullptr)
+            if (root != nullptr && root->next != nullptr)
                 destroy_util(root->next);
             delete[] root;
             root = nullptr;
