@@ -89,7 +89,7 @@ namespace Interface
             while (true)
             {
                 out << std::endl
-                    << "Your choice: ";
+                    << "  Your choice: ";
                 multitype choice; std::cin >> choice;
                 if (!items.get_where("No", choice, "No").equal("bad_access"))
                 {

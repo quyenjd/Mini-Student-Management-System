@@ -1,5 +1,5 @@
-No,Course ID,Course name,Class,Start date,End date,Day of week,Start hour,Start minute,End hour,End minute,Room
-1,CS162,Introduction to Programming,19APCS2,2020/04/06,2020/06/01,MON,7,30,11,30,I42
-2,CM101,Communications,19APCS2,2020/04/11,2020/06/01,SAT,13,30,17,30,I23
-3,PH212,General Physics II,19APCS1,2020/04/01,2020/06/10,WED,15,30,17,30,I24
-4,MTH252,Calculus II,19APCS1,2020/04/01,2020/06/01,WED,07,30,11,30,I35
+Course ID,Course name,Class,Start date,End date,Day of week,Start hour,Start minute,End hour,End minute,Room
+CS162,Introduction to Programming,19APCS2,2020/04/06,2020/06/01,MON,7,30,11,30,I42
+CM101,Communications,19APCS2,2020/04/11,2020/06/01,SAT,13,30,17,30,I23
+PH212,General Physics II,19APCS1,2020/04/01,2020/06/10,WED,15,30,17,30,I24
+MTH252,Calculus II,19APCS1,2020/04/01,2020/06/01,WED,07,30,11,30,I35
