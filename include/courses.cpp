@@ -4,300 +4,196 @@ using namespace Csv;
 using namespace std;
 namespace SMS
 {
+    void create_academic_year() {   //checked
+        csv_handler year_file("years.csv");
+        year_file.init_read();
+        year_file.read_and_terminate();
 
-    academic_year* create_academic_year() {  //checked
-        academic_year *y = new academic_year();
-        return y;
-    }
+        Interface::input_menu menu;
+        menu.set_title("School Year");
+        menu.add_item("School Year",true);
+        list<multitype> res=menu.print_menu_and_wait();
 
-    void school::add_year(academic_year *y){ //checked
-        a.push_back(y);
-    }
-
-    void school::delete_academic_year (academic_year *&y) { //checked
-        for (int i=0;i<a.size();i++) {
-            if (a.at(i) == y) {
-                a.delete_at(i);
-                break;
+        for (int i=0;i<year_file.get_table().num_rows();i++) {
+            if (year_file.get_table().get_row(i).at(1).equal(res.at(0))) {
+                cout << "This school year has already been in the list";
+                return;
             }
         }
+        year_file.get_table().add_row();
+        year_file.get_table().get_row(year_file.get_table().num_rows()-1).at(0).assign(year_file.get_table().num_rows());
+        year_file.get_table().get_row(year_file.get_table().num_rows()-1).at(1).assign(res.at(0));
+        year_file.init_write();
+        year_file.write_and_terminate();
     }
 
-    void school::view_academic_year() { //checked
-        for (int i=0;i<a.size();i++) {
-            cout << "School Year " << a.at(i)->school_year.to_str() << endl;
+    void add_new_semester_to_academic_year() {
+        csv_handler year_file("years.csv");
+        year_file.init_read();
+        year_file.read_and_terminate();
+
+        csv_handler yearsemester_file("yearsemester.csv");
+        yearsemester_file.init_read();
+        yearsemester_file.read_and_terminate();
+
+        csv_handler semester_file("semesters.csv");
+        semester_file.init_read();
+        semester_file.init_write();
+
+        Interface::select_menu year_menu;
+        year_menu.set_title("School Year");
+
+        //Show menu years to choose
+        for (int i=0;i<year_file.get_table().num_rows();i++) {
+            year_menu.add_item(i+1,year_file.get_table().get_row(i).at(1));
         }
-    }
 
-    semester* create_semester() { //checked
-        semester *s= new semester();
-        return s;
-    }
+        year_menu.add_item(year_file.get_table().num_rows()+1,"Exit");
+        int select;
 
-    void academic_year::add_semester (semester *&sem) { //checked
-        s.push_back(sem);
-        sem->semester_name = s.size();
-    }
+        //Choosing a specific year
+        do {
+            select=year_menu.print_menu_and_wait().to_int();
+            if (select>=1 && select<=year_file.get_table().num_rows()) {
+                Interface::input_menu menu;
+                menu.set_title("Semester name");
+                menu.add_item("Semester name",true);
 
-    void academic_year::delete_semester (semester *&sem) { //checked
-        for (int i=0;i<s.size();i++) {
-            if (sem==s.at(i)) {
-                s.delete_at(i);
-                break;
-            }
-        }
-    }
+                list<multitype> res=menu.print_menu_and_wait(false);
 
-    multitype academic_year::get_school_year () { //checked
-        return school_year;
-    }
-
-    void academic_year::set_school_year (const multitype &name) { //checked
-        school_year = name;
-    }
-
-    void academic_year::view_semester() {   //checked
-        for (int i=0;i<s.size();i++) {
-            cout << "Semester " << s.at(i)->semester_name.to_str() << endl;
-        }
-    }
-
-    multitype semester::get_semester_name () {  //checked
-        return semester_name;
-    }
-
-    course* create_course() {   //checked
-        course *crse=new course();
-        return crse;
-    }
-
-    void semester::add_course(course *crse) {   //checked
-        csv_handler course_file("19APCS1-Schedule.csv");
-        if (!course_file.init_read()) {
-            cout << "Error!";
-            return;
-        }
-        course_file.read_and_terminate();
-        table data_table=course_file.get_table();
-        crse->data[0]=data_table.num_rows()+1;
-        c.push_back(crse);
-    }
-
-    void semester::view_course() {  //checked
-        for (int i=0;i<c.size();i++) {
-            cout << "Course " << c.at(i)->data[2].to_str() << endl;
-        }
-    }
-
-    void semester::import_course() { ////// checked
-        csv_handler course_file("19APCS1-Schedule.csv");
-        if (!course_file.init_read()) {
-            cout << "Error!";
-            return;
-        }
-        course_file.read_and_terminate();
-        table data_table=course_file.get_table();
-
-        csv_handler student_file("19APCS1-Student.csv");
-        if (!student_file.init_read()) {
-            cout << "Error!";
-            return;
-        }
-        student_file.read_and_terminate();
-        table *student_table=&student_file.get_table();
-
-        for (int i=0;i<data_table.num_rows();i++) {
-            course* new_course=create_course();
-            add_course(new_course);
-            for (int j=0;j<16;j++) {
-                new_course->data[j]=data_table.get_row(i).at(j);
-            }
-
-            for (int j=0;j<student_table->num_rows();j++) {
-                if (student_table->get_row(j).at(4).equal(new_course->data[3])) {
-                    student* new_student=create_student();
-                    new_course->add_student(new_student);
-                    for (int k=0;k<5;k++) {
-                        new_student->data[k]=student_table->get_row(j).at(k);
+                for (int j=0;j<semester_file.get_table().num_rows();j++) {
+                    if (semester_file.get_table().get_row(j).at(1).equal(res.at(0)) && semester_file.get_table().get_row(j).at(0).equal(year_file.get_table().get_row(select-1).at(1))) {
+                        cout << "This semester has already been in this school year" << endl;
+                        return;
                     }
                 }
+
+                //add semester to yearsemester.csv
+                yearsemester_file.get_table().add_row();
+                yearsemester_file.get_table().get_row(yearsemester_file.get_table().num_rows()-1).at(0).assign(select-1);
+                yearsemester_file.get_table().get_row(yearsemester_file.get_table().num_rows()-1).at(1).assign(yearsemester_file.get_table().num_rows());
+
+                //add semester to semesters.csv
+                semester_file.get_table().add_row();
+                semester_file.get_table().get_row(semester_file.get_table().num_rows()-1).at(0).assign(year_file.get_table().get_row(select-1).at(1));
+                semester_file.get_table().get_row(semester_file.get_table().num_rows()-1).at(1).assign(res.at(0));
             }
+        } while (select!=year_file.get_table().num_rows()+1);
 
-        }
+        yearsemester_file.init_write();
+        yearsemester_file.write_and_terminate();
+
+        semester_file.init_write();
+        semester_file.write_and_terminate();
     }
 
-    void semester::set_course_data_manually (course *&crse) {   //checked
-        char id[100];
-        cin.ignore();
-        cout << "Enter Course ID: ";
-        cin.get(id,100);
-        crse->data[1]=id;
 
-        char c_name[100];
-        cin.ignore();
-        cout << "Enter Course Name: ";
-        cin.get(c_name,100);
-        crse->data[2]=c_name;
-
-        char c_class[100];
-        cin.ignore();
-        cout << "Enter Class: ";
-        cin.get(c_class,100);
-        crse->data[3]=c_class;
-
-        char l_user[100];
-        cin.ignore();
-        cout << "Enter Lecturer Username: ";
-        cin.get(l_user,100);
-        crse->data[4]=l_user;
-
-        char l_name[100];
-        cin.ignore();
-        cout << "Enter Lecturer Name: ";
-        cin.get(l_name,100);
-        crse->data[5]=l_name;
-
-        char l_degree[100];
-        cin.ignore();
-        cout << "Enter Lecturer Degree: ";
-        cin.get(l_degree,100);
-        crse->data[6]=l_degree;
-
-        char l_gender[100];
-        cin.ignore();
-        cout << "Enter Lecturer Gender: ";
-        cin.get(l_gender,100);
-        crse->data[7]=l_gender;
-
-        char s_date[100];
-        cin.ignore();
-        cout << "Enter Start Date: ";
-        cin.get(s_date,100);
-        crse->data[8]=s_date;
-
-        char e_date[100];
-        cin.ignore();
-        cout << "Enter End Date: ";
-        cin.get(e_date,100);
-        crse->data[9]=e_date;
-
-        char d_o_w[100];
-        cin.ignore();
-        cout << "Enter Day of Week: ";
-        cin.get(d_o_w,100);
-        crse->data[10]=d_o_w;
-
-        char s_hour[10];
-        cin.ignore();
-        cout << "Enter Start Hour: ";
-        cin.get(s_hour,10);
-        crse->data[11]=s_hour;
-
-        char e_hour[10];
-        cin.ignore();
-        cout << "Enter End Hour: ";
-        cin.get(e_hour,10);
-        crse->data[12]=e_hour;
-
-        char s_minute[10];
-        cin.ignore();
-        cout << "Enter Start Minute: ";
-        cin.get(s_minute,10);
-        crse->data[13]=s_minute;
-
-        char e_minute[10];
-        cin.ignore();
-        cout << "Enter End Minute: ";
-        cin.get(e_minute,10);
-        crse->data[14]=e_minute;
-
-        char room[10];
-        cin.ignore();
-        cout << "Enter Room: ";
-        cin.get(room,10);
-        crse->data[15]=room;
-    }
-
-    void semester::add_course_manually() {  //checked
-        course *new_course= new course();
-        add_course(new_course);
-        set_course_data_manually(new_course);
-
-        csv_handler course_file("19APCS1-Schedule.csv");
-        if (!course_file.init_read()) {
-            cout << "Error!";
-            return;
-        }
+    void create_new_course_manually() {
+        csv_handler course_file("courses.csv");
+        course_file.init_read();
         course_file.read_and_terminate();
-//        table data_table=course_file.get_table();
 
-        if (!course_file.init_write()) {
-            cout << "Error!";
-            return;
+        Interface::input_menu menu;
+        menu.set_title("Course Information");
+        menu.add_item("Course ID",false);
+        menu.add_item("Course Name",true);
+        menu.add_item("Class",false);
+        menu.add_item("Start Date",false);
+        menu.add_item("End Date",false);
+        menu.add_item("Day of Week",false);
+        menu.add_item("Start hour", false);
+        menu.add_item("Start Minute",false);
+        menu.add_item("End hour",false);
+        menu.add_item("End Minute",false);
+        menu.add_item("Room",false);
+
+        list<multitype> res=menu.print_menu_and_wait();
+
+        for (int i=0;i<course_file.get_table().num_rows();i++) {
+            if (course_file.get_table().get_row(i).at(1).equal(res.at(1))) {
+                cout << "This course has already been in the list" << endl;
+                return;
+            }
         }
+
         course_file.get_table().add_row();
-        for (int i=0;i<16;i++) {
-            course_file.get_table().get_row(course_file.get_table().num_rows()-1).at(i)=new_course->data[i];
-        }
+        course_file.get_table().get_row(course_file.get_table().num_rows()-1).at(0).assign(course_file.get_table().num_rows());
+        for (int j=1;j<13;j++) course_file.get_table().get_row(course_file.get_table().num_rows()-1).at(j).assign(res.at(j));
+
+        course_file.init_write();
         course_file.write_and_terminate();
     }
 
-    void semester::delete_course(course *&crse) { //checked
-        csv_handler course_file("19APCS1-Schedule.csv");
-        if (!course_file.init_read()) {
-            cout << "Error!";
-            return;
-        }
+    void update_course_manually() {
+        csv_handler course_file ("courses.csv");
+        course_file.init_read();
         course_file.read_and_terminate();
-        table *data_table=&course_file.get_table();
 
-        if (!course_file.init_write()) {
-            cout << "Error!";
-            return;
+        Interface::select_menu course_menu;
+        course_menu.set_title("Courses");
+        for (int i=0;i<course_file.get_table().num_rows();i++) {
+            course_menu.add_item(i+1,course_file.get_table().get_row(i).at(1));
         }
+        course_menu.add_item(course_file.get_table().num_rows()+1,"Exit");
+        int select;
 
-        for (int i=0;i<c.size();i++) {
-            if (c.at(i)==crse) {
-                data_table->rm_row_where("No",c.at(i)->data[0]);
-                c.delete_at(i);
+        do {
+            select=course_menu.print_menu_and_wait().to_int();
+            if (select >=1 && select <= course_file.get_table().num_rows()) {
+
+                Interface::input_menu menu;
+
+                menu.set_title("Course Information");
+                menu.add_item("Course ID",false);
+                menu.add_item("Course Name",true);
+                menu.add_item("Class",false);
+                menu.add_item("Start Date",false);
+                menu.add_item("End Date",false);
+                menu.add_item("Day of Week",false);
+                menu.add_item("Start hour", false);
+                menu.add_item("Start Minute",false);
+                menu.add_item("End hour",false);
+                menu.add_item("End Minute",false);
+                menu.add_item("Room",false);
+
+                list<multitype> res=menu.print_menu_and_wait();
+
+                for (int j=1;j<13;j++) course_file.get_table().get_row(select-1).at(j).assign(res.at(j));
                 break;
             }
-        }
+        } while (select != course_file.get_table().num_rows()+1);
+
+
+        course_file.init_write();
         course_file.write_and_terminate();
     }
 
-    void semester::update_course(course *&crse) {   //checked
-        csv_handler course_file("19APCS1-Schedule.csv");
-        if (!course_file.init_read()) {
-            cout << "Error!";
-            return;
-        }
+    void delete_course() {
+        csv_handler course_file("courses.csv");
+        course_file.init_read();
         course_file.read_and_terminate();
-        table *data_table=&course_file.get_table();
 
-        if (!course_file.init_write()) {
-            cout << "Error!";
-            return;
+        Interface::select_menu course_menu;
+        course_menu.set_title("Courses");
+        for (int i=0;i<course_file.get_table().num_rows();i++) {
+            course_menu.add_item(i+1,course_file.get_table().get_row(i).at(1));
         }
+        course_menu.add_item(course_file.get_table().num_rows()+1,"Exit");
 
-        for (int i=0;i<c.size();i++) {
-            if (c.at(i)==crse) {
-                set_course_data_manually(c.at(i));
-                for (int j=1;j<16;j++) {
-                    data_table->get_row_where("No",crse->data[0]).at(j)=c.at(i)->data[j];
+        int select;
+        do {
+            select=course_menu.print_menu_and_wait().to_int();
+            if (select>=1 && select <= course_file.get_table().num_rows()) {
+                for (int i=select;i<course_file.get_table().num_rows();i++) {
+                    course_file.get_table().get_row(i).at(0).assign(course_file.get_table().get_row(i).at(0).to_int()-1);
                 }
+                course_file.get_table().rm_row(select-1);
+                break;
             }
-        }
+        } while (select != course_file.get_table().num_rows()+1);
 
-        course_file.write_and_terminate();
     }
-
-    student* create_student() { //checked
-        student *stud= new student();
-        return stud;
-    }
-
-    void course::add_student(student *&stud) {  //checked
+    /*void course::add_student(student *&stud) {  //checked
         csv_handler student_file("19APCS1-Student.csv");
         if (!student_file.init_read()) {
             cout << "Error!";
@@ -544,5 +440,5 @@ namespace SMS
                 break;
             }
         }
-    }
+    }*/
 };
