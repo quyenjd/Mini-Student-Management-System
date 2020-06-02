@@ -16,28 +16,22 @@ namespace SMS
 
     void delete_course();
 
-   // void view_list_course_current(school *sch); //view list of courses in current semester
+    void update_academic_year_name();
 
-/*    extern list<lecturer*> lect;    //list of lecturers
+    void update_semester_name();
 
-    lecturer* create_lecturer (); //create one new non-data lecturer
+    void add_student_to_course();
 
-    void add_lecturer (lecturer *new_lec); //add one lecturer to the list of lecturers
+    void remove_student_from_course();
 
-    void create_lecturer_list(); //create a list of lecturers from courses csv file
-                                 //This file used in this function was 19APCS1-Schedule.csv
+    void add_lecturer_to_course();
 
-    bool check_exist_lecturer_in_list(lecturer *new_lec);   //check if the lecturer is in list or not
-                                                        //check by using username because difference lecturers have difference usernames
+    void remove_lecturer_from_course();
 
-    void view_lecturer_list();  //view the list of lecturers
+    void delete_semester_from_academic_year();
 
-    bool set_lecturer_data(lecturer *&new_lec); //set one lecturer data after checking lecturer exist in list before or not
+    void add_course_to_semester();
 
-    void add_lecturer_manually(); //add one lecturer to the list - entered by keyboard
-
-    void update_lecturer(lecturer *&new_lec);   //update one lecturer data
-
-    void delete_lecturer(lecturer *&new_lec);   //delete one lecturer from the list*/
+    void view_students_of_course();
 };
 #endif // COURSES_H
