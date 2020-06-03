@@ -408,10 +408,11 @@ namespace Csv
 
         void destroy_util (iter *root)
         {
-            if (root != nullptr && root->next != nullptr)
-                destroy_util(root->next);
-            delete[] root;
-            root = nullptr;
+            if (root->next == nullptr)
+                return;
+            destroy_util(root->next);
+            delete[] root->next;
+            root->next = nullptr;
             --_size;
         }
 

@@ -89,7 +89,8 @@ namespace Interface
 
     void print_table (const table& tabl,
                       const multitype& tabl_head,
-                      bool vertical,
+                      bool _nocolumn,
+                      bool _vertical,
                       bool _clrscr,
                       std::ostream& out)
     {
@@ -115,11 +116,14 @@ namespace Interface
         // write
         if (Nrows > 0)
         {
-            if (vertical)
+            if (_vertical)
             {
-                out << "No  ";
-                for (int i = 0; i < maxl.at(0) - 2; ++i)
-                    out << " ";
+                if (_nocolumn)
+                {
+                    out << "No  ";
+                    for (int i = 0; i < maxl.at(0) - 2; ++i)
+                        out << " ";
+                }
                 for (int i = 0; i < Ncols; ++i)
                 {
                     multitype e = tabl.get_keys().at(i);
@@ -156,15 +160,18 @@ namespace Interface
             }
             else
             {
-                int cols_maxl = 2;
+                int cols_maxl = _nocolumn ? 2 : 0;
                 for (int i = 0; i < Ncols; ++i)
                     cols_maxl = Max(cols_maxl, (int)strlen(tabl.get_keys().at(i).to_str()));
                 for (int i = 0; i < Nrows; ++i)
                 {
-                    out << "  No  ";
-                    for (int j = 0; j < cols_maxl - 2; ++j)
-                        out << " ";
-                    out << (i + 1) << std::endl;
+                    if (_nocolumn)
+                    {
+                        out << "  No  ";
+                        for (int j = 0; j < cols_maxl - 2; ++j)
+                            out << " ";
+                        out << (i + 1) << std::endl;
+                    }
                     for (int j = 0; j < Ncols; ++j)
                     {
                         multitype e = tabl.get_keys().at(j);

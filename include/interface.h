@@ -37,7 +37,8 @@ namespace Interface
     // print a table (/w title).
     void print_table (const table& tabl,
                       const multitype& tabl_head = "No title",
-                      bool vertical = true,
+                      bool _nocolumn = true,
+                      bool _vertical = true,
                       bool _clrscr = true,
                       std::ostream& out = std::cout);
 
