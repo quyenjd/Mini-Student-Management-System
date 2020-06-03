@@ -2,6 +2,8 @@
 #define COURSES_H
 #include "csv.h"
 #include "interface.h"
+#include "csv_import.h"
+
 using namespace Csv;
 using namespace std;
 namespace SMS
@@ -33,5 +35,13 @@ namespace SMS
     void add_course_to_semester();
 
     void view_students_of_course();
+
+    void view_all_lecturers();
+
+    void view_lecturers_of_course();
+
+    void delete_course_from_semester();
+
+    void view_course_of_semester();
 };
 #endif // COURSES_H
