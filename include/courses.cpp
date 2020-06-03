@@ -7,7 +7,7 @@ namespace SMS
     void create_academic_year() {   //checked
         Interface::input_menu menu;
         menu.set_title("School Year");
-        menu.add_item("School Year",true);
+        menu.add_item("School Year");
         list<multitype> res=menu.print_menu_and_wait();
 
         for (int i=0;i<years.get_table().num_rows();i++) {
@@ -35,7 +35,7 @@ namespace SMS
             year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
         }
 
-        year_menu.add_item(years.get_table().num_rows()+1,"Exit");
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
         int select;
 
         //Choosing a specific year
@@ -44,7 +44,7 @@ namespace SMS
             if (select>=1 && select<=years.get_table().num_rows()) {
                 Interface::input_menu menu;
                 menu.set_title(multitype("New Semester of ").append(years.get_table().get_row(select-1).at(1)));
-                menu.add_item("Semester name",true);
+                menu.add_item("Semester name");
 
                 list<multitype> res=menu.print_menu_and_wait();
 
@@ -84,17 +84,17 @@ namespace SMS
     void create_new_course_manually() {
         Interface::input_menu menu;
         menu.set_title("New Course Information");
-        menu.add_item("Course ID",false);
-        menu.add_item("Course Name",true);
-        menu.add_item("Class",false);
-        menu.add_item("Start Date (YYYY/MM/DD)",false);
-        menu.add_item("End Date (YYYY/MM/DD)",false);
-        menu.add_item("Day of Week",false);
-        menu.add_item("Start hour", false);
-        menu.add_item("Start Minute",false);
-        menu.add_item("End hour",false);
-        menu.add_item("End Minute",false);
-        menu.add_item("Room",false);
+        menu.add_item("Course ID";
+        menu.add_item("Course Name");
+        menu.add_item("Class");
+        menu.add_item("Start Date (YYYY/MM/DD)");
+        menu.add_item("End Date (YYYY/MM/DD)");
+        menu.add_item("Day of Week");
+        menu.add_item("Start hour");
+        menu.add_item("Start Minute");
+        menu.add_item("End hour");
+        menu.add_item("End Minute");
+        menu.add_item("Room");
 
         list<multitype> res=menu.print_menu_and_wait();
 
@@ -120,7 +120,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(1));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
         int select;
 
         do {
@@ -130,17 +130,17 @@ namespace SMS
                 Interface::input_menu menu;
 
                 menu.set_title("Edit Course Information");
-                menu.add_item("Course ID",false);
-                menu.add_item("Course Name",true);
-                menu.add_item("Class",false);
-                menu.add_item("Start Date (YYYY/MM/DD)",false);
-                menu.add_item("End Date (YYYY/MM/DD)",false);
-                menu.add_item("Day of Week",false);
-                menu.add_item("Start hour", false);
-                menu.add_item("Start Minute",false);
-                menu.add_item("End hour",false);
-                menu.add_item("End Minute",false);
-                menu.add_item("Room",false);
+                menu.add_item("Course ID");
+                menu.add_item("Course Name");
+                menu.add_item("Class");
+                menu.add_item("Start Date (YYYY/MM/DD)");
+                menu.add_item("End Date (YYYY/MM/DD)");
+                menu.add_item("Day of Week");
+                menu.add_item("Start hour");
+                menu.add_item("Start Minute");
+                menu.add_item("End hour");
+                menu.add_item("End Minute");
+                menu.add_item("Room");
 
                 list<multitype> res=menu.print_menu_and_wait();
 
@@ -162,7 +162,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(1));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
         do {
@@ -186,7 +186,7 @@ namespace SMS
             year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
         }
 
-        year_menu.add_item(years.get_table().num_rows()+1,"Exit");
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
         int select;
 
         do {
@@ -194,7 +194,7 @@ namespace SMS
             if (select>=1 && select <=years.get_table().num_rows()) {
                 Interface::input_menu year_update_menu;
                 year_update_menu.set_title("Edit School Year's Name");
-                year_update_menu.add_item("New name",true);
+                year_update_menu.add_item("New name");
                 list<multitype> res=year_update_menu.print_menu_and_wait();
 
                 years.get_table().get_row(select-1).at(1).assign(res.at(0));
@@ -213,7 +213,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
         int select;
         do {
             select=semester_menu.print_menu_and_wait().to_int();
@@ -221,7 +221,7 @@ namespace SMS
 
                 Interface::input_menu semester_update_menu;
                 semester_update_menu.set_title(multitype("Edit Semester ").append(semesters.get_table().get_row(select-1).at(1)));
-                semester_update_menu.add_item("New name",true);
+                semester_update_menu.add_item("New name");
 
                 list<multitype> res=semester_update_menu.print_menu_and_wait();
 
@@ -242,7 +242,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -251,7 +251,7 @@ namespace SMS
             if (select >=1 && select <= courses.get_table().num_rows()) {
                 Interface::input_menu student_menu;
                 student_menu.set_title("New Student's Information");
-                student_menu.add_item("Student ID",false);
+                student_menu.add_item("Student ID");
 
                 list<multitype> res=student_menu.print_menu_and_wait();
 
@@ -314,7 +314,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -323,7 +323,7 @@ namespace SMS
             if (select>=1 && select <= courses.get_table().num_rows()) {
                 Interface::input_menu student_menu;
                 student_menu.set_title("Removed Student's Information");
-                student_menu.add_item("Student Remove ID",false);
+                student_menu.add_item("Student Remove ID");
                 list<multitype> res=student_menu.print_menu_and_wait();
 
                 for (int j=0;j<students.get_table().num_rows();j++) {
@@ -373,7 +373,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -382,7 +382,7 @@ namespace SMS
             if (select >=1 && select <= courses.get_table().num_rows()) {
                 Interface::input_menu lecturer_menu;
                 lecturer_menu.set_title("Lecturer's Information");
-                lecturer_menu.add_item("Lecturer username",false);
+                lecturer_menu.add_item("Lecturer username");
 
                 list<multitype> res=lecturer_menu.print_menu_and_wait();
 
@@ -428,7 +428,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -436,7 +436,7 @@ namespace SMS
             select=course_menu.print_menu_and_wait().to_int();
             if (select>=1 && select <= courses.get_table().num_rows()) {
                 Interface::input_menu lecturer_menu;
-                lecturer_menu.add_item("Lecturer Remove Username",false);
+                lecturer_menu.add_item("Lecturer Remove Username");
                 list<multitype> res=lecturer_menu.print_menu_and_wait();
 
                 int check=0;
@@ -486,7 +486,7 @@ namespace SMS
             year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
         }
 
-        year_menu.add_item(years.get_table().num_rows()+1,"Exit");
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
         int select_year;
 
         //Choosing a specific year
@@ -510,7 +510,7 @@ namespace SMS
                     semester_menu.add_item(j+1,new_semester_table.get_row(j).at(0));
                 }
 
-                semester_menu.add_item(new_semester_table.num_rows()+1,"Exit");
+                semester_menu.add_item(new_semester_table.num_rows()+1,"Back");
 
                 int select_semester;
                 do {
@@ -551,7 +551,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -618,7 +618,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -647,7 +647,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
 
         int select_semester;
 
@@ -659,7 +659,7 @@ namespace SMS
                 for (int j=0;j<courses.get_table().num_rows();j++) {
                     course_menu.add_item(j+1,courses.get_table().get_row(j).at(0));
                 }
-                course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+                course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
                 int select_course;
 
@@ -701,7 +701,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
 
         int select_semester;
 
@@ -716,7 +716,7 @@ namespace SMS
                 for (int j=0;j<new_semester_course.num_rows();j++) {
                     course_menu.add_item(j+1,new_semester_course.get_row(j).at(0));
                 }
-                course_menu.add_item(new_semester_course.num_rows()+1,"Exit");
+                course_menu.add_item(new_semester_course.num_rows()+1,"Back");
 
                 int select_course;
 
@@ -755,7 +755,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
 
         int select_semester;
 
