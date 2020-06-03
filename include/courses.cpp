@@ -35,7 +35,7 @@ namespace SMS
             year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
         }
 
-        year_menu.add_item(years.get_table().num_rows()+1,"Exit");
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
         int select;
 
         //Choosing a specific year
@@ -120,7 +120,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(1));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
         int select;
 
         do {
@@ -162,7 +162,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(1));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
         do {
@@ -186,7 +186,7 @@ namespace SMS
             year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
         }
 
-        year_menu.add_item(years.get_table().num_rows()+1,"Exit");
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
         int select;
 
         do {
@@ -213,7 +213,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
         int select;
         do {
             select=semester_menu.print_menu_and_wait().to_int();
@@ -242,7 +242,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -314,7 +314,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -373,7 +373,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -428,7 +428,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -486,7 +486,7 @@ namespace SMS
             year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
         }
 
-        year_menu.add_item(years.get_table().num_rows()+1,"Exit");
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
         int select_year;
 
         //Choosing a specific year
@@ -510,7 +510,7 @@ namespace SMS
                     semester_menu.add_item(j+1,new_semester_table.get_row(j).at(0));
                 }
 
-                semester_menu.add_item(new_semester_table.num_rows()+1,"Exit");
+                semester_menu.add_item(new_semester_table.num_rows()+1,"Back");
 
                 int select_semester;
                 do {
@@ -551,7 +551,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -618,7 +618,7 @@ namespace SMS
         for (int i=0;i<courses.get_table().num_rows();i++) {
             course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
         }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
         int select;
 
@@ -647,7 +647,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
 
         int select_semester;
 
@@ -659,7 +659,7 @@ namespace SMS
                 for (int j=0;j<courses.get_table().num_rows();j++) {
                     course_menu.add_item(j+1,courses.get_table().get_row(j).at(0));
                 }
-                course_menu.add_item(courses.get_table().num_rows()+1,"Exit");
+                course_menu.add_item(courses.get_table().num_rows()+1,"Back");
 
                 int select_course;
 
@@ -701,7 +701,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
 
         int select_semester;
 
@@ -716,7 +716,7 @@ namespace SMS
                 for (int j=0;j<new_semester_course.num_rows();j++) {
                     course_menu.add_item(j+1,new_semester_course.get_row(j).at(0));
                 }
-                course_menu.add_item(new_semester_course.num_rows()+1,"Exit");
+                course_menu.add_item(new_semester_course.num_rows()+1,"Back");
 
                 int select_course;
 
@@ -755,7 +755,7 @@ namespace SMS
         for (int i=0;i<semesters.get_table().num_rows();i++) {
             semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
         }
-        semester_menu.add_item(semesters.get_table().num_rows()+1,"Exit");
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
 
         int select_semester;
 
