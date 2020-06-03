@@ -15,11 +15,20 @@ bool checkExist(multitype s){
     return false;
 }
 
+bool checkExist2(multitype s){
+    for (int i=0;i<coursestudent.get_table().num_rows();i++){
+        if (coursestudent.get_table().get(i,"Student ID").equal(s)){
+            return true;
+        }
+    }
+    return false;
+}
+
 void removeStudent(){
     using namespace Csv;
     Interface::input_menu menu;
     menu.set_title("Delete Student");
-    menu.add_item("Student ID: ",false);
+    menu.add_item("Student ID: ",true);
     list<multitype> res=menu.print_menu_and_wait(true);
     if (checkExist(res.at(0))==false){
         Interface::print_note("The student is not exist","Error");
@@ -35,7 +44,9 @@ void removeStudent(){
         return;
     }
     users.write_and_terminate();
-    coursestudent.get_table().rm_row_where("Student ID",res.at(0));
+    while (checkExist2(res.at(0))){
+        coursestudent.get_table().rm_row_where("Student ID",res.at(0));
+    }
     if (coursestudent.init_write()==false){
         return;
     }
@@ -47,10 +58,10 @@ void addStudent(){
     using namespace Csv;
     Interface::input_menu menu;
     menu.set_title("Add Student");
-    menu.add_item("Student ID: ",false);
+    menu.add_item("Student ID: ",true);
     menu.add_item("Fullname: ",true);
     menu.add_item("Date of birth: ",true);
-    menu.add_item("Class: ",false);
+    menu.add_item("Class: ",true);
     list<multitype> res=menu.print_menu_and_wait(false);
     if (checkExist(res.at(0))==true){
         Interface::print_note("The student is exist","Error");
@@ -90,7 +101,7 @@ void editStudent(){
     using namespace Csv;
     Interface::input_menu menu;
     menu.set_title("Edit Student");
-    menu.add_item("Student ID: ",false);
+    menu.add_item("Student ID: ",true);
     list<multitype> res=menu.print_menu_and_wait(true);
     Interface::select_menu menu2;
     menu2.set_title(multitype("Editing student ").append(res.at(0)));
@@ -98,45 +109,68 @@ void editStudent(){
     menu2.add_item(2,"Fullname");
     menu2.add_item(3,"Date of birth");
     menu2.add_item(4,"Class");
+    menu2.add_item(5,"Exit");
     if (checkExist(res.at(0))==false){
         Interface::print_note("The student is not exist","Error");
         return;
     }
-    int num=menu2.print_menu_and_wait().to_int();
-    if (num==1){
-        Interface::input_menu menu;
-        menu.set_title("Edit Student");
-        menu.add_item("Student ID: ",false);
-        list<multitype> res2=menu.print_menu_and_wait(true);
-        students.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(res2.at(0));
-        users.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(res2.at(0));
-        coursestudent.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
+    int num;
+    do
+    {
+        num=menu2.print_menu_and_wait().to_int();
+        switch (num){
+        case (1):{
+            Interface::input_menu menu;
+            menu.set_title("Edit Student");
+            menu.add_item("Student ID: ",true);
+            list<multitype> res2=menu.print_menu_and_wait(true);
+            students.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(res2.at(0));
+            users.get_table().get_row_where("ID",res.at(0)).at(0).assign(res2.at(0));
+            while (checkExist2(res.at(0))){
+                coursestudent.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
+            }
+            break;
+        }
+        case (2):{
+            Interface::input_menu menu;
+            menu.set_title("Edit Student");
+            menu.add_item("Fullname: ",true);
+            list<multitype> res2=menu.print_menu_and_wait(true);
+            students.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
+            break;
+        }
+        case (3):{
+            Interface::input_menu menu;
+            menu.set_title("Edit Student");
+            menu.add_item("Date of birth: ",true);
+            list<multitype> res2=menu.print_menu_and_wait(true);
+            students.get_table().get_row_where("Student ID",res.at(0)).at(2).assign(res2.at(0));
+            break;
+        }
+        case (4):{
+            Interface::input_menu menu;
+            menu.set_title("Edit Student");
+            menu.add_item("Class: ",true);
+            list<multitype> res2=menu.print_menu_and_wait(true);
+            students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(res.at(0));
+            break;
+        }
+        case (5):break;
+        }
     }
-    if (num==2){
-        Interface::input_menu menu;
-        menu.set_title("Edit Student");
-        menu.add_item("Fullname: ",true);
-        list<multitype> res2=menu.print_menu_and_wait(true);
-        students.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
-    }
-    if (num==3){
-        Interface::input_menu menu;
-        menu.set_title("Edit Student");
-        menu.add_item("Date of birth: ",false);
-        list<multitype> res2=menu.print_menu_and_wait(true);
-        students.get_table().get_row_where("Student ID",res.at(0)).at(2).assign(res2.at(0));
-    }
-    if (num==4){
-        Interface::input_menu menu;
-        menu.set_title("Edit Student");
-        menu.add_item("Class: ",false);
-        list<multitype> res2=menu.print_menu_and_wait(true);
-        students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(res.at(0));
-    }
+    while (num!=5);
     if (students.init_write()==false){
         return;
     }
+    if (users.init_write()==false){
+        return;
+    }
+    if (coursestudent.init_write()==false){
+        return;
+    }
     students.write_and_terminate();
+    users.write_and_terminate();
+    coursestudent.write_and_terminate();
     Interface::print_note("Edit successfully","Result");
 }
 
@@ -192,7 +226,7 @@ void viewClass(){
 void viewStudentInClass(){
     Interface::input_menu menu;
     menu.set_title("View Student");
-    menu.add_item("Class: ",false);
+    menu.add_item("Class: ",true);
     list<multitype> res=menu.print_menu_and_wait(false);
     s=res.at(0);
     Interface::print_table(students.get_table().filter(filterStudent),"Students");
@@ -200,8 +234,8 @@ void viewStudentInClass(){
 void newClass(){
     Interface::input_menu menu;
     menu.set_title("Import Student");
-    menu.add_item("Class: ",false);
-    menu.add_item("File link: ",false);
+    menu.add_item("Class: ",true);
+    menu.add_item("File link: ",true);
     list<multitype> res=menu.print_menu_and_wait(true);
     csv_handler import(res.at(1).to_str());
     if (import.init_read()==false){
@@ -212,7 +246,7 @@ void newClass(){
         students.get_table().add_row();
         users.get_table().add_row();
         students.get_table().get(students.get_table().num_rows()-1,"Student ID").assign(import.get_table().get(i,"Student ID"));
-        users.get_table().get(users.get_table().num_rows()-1,"Student ID").assign(import.get_table().get(i,"Student ID"));
+        users.get_table().get(users.get_table().num_rows()-1,"ID").assign(import.get_table().get(i,"Student ID"));
         students.get_table().get(students.get_table().num_rows()-1,"Fullname").assign(import.get_table().get(i,"Fullname"));
         students.get_table().get(students.get_table().num_rows()-1,"DoB").assign(import.get_table().get(i,"DoB"));
         char* dobb=new char[20];
@@ -226,12 +260,17 @@ void newClass(){
             }
         }
         users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(dobb);
+        users.get_table().get(users.get_table().num_rows()-1,"Role").assign("Student");
         students.get_table().get(students.get_table().num_rows()-1,"Class").assign(res.at(0));
     }
     if (students.init_write()==false){
         return;
     }
+    if (users.init_write()==false){
+        return;
+    }
     students.write_and_terminate();
+    users.write_and_terminate();
 }
 
 }
