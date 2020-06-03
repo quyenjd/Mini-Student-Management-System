@@ -1,6 +1,8 @@
 #ifndef SCOREBOARD_QUYENJD_H
 #define SCOREBOARD_QUYENJD_H
 
+#include "csv_import.h"
+
 namespace SMS
 {
     void view_scoreboard();

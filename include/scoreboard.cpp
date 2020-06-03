@@ -9,13 +9,6 @@ bool __filter_courseID_func (Csv::multitype column, Csv::list<Csv::multitype> ro
 
 void SMS::view_scoreboard()
 {
-    Csv::csv_handler scoreboard("db/scoreboard.csv"),
-                     courses("db/courses.csv");
-    if (!scoreboard.init_read() || !courses.init_read())
-        return;
-    scoreboard.read_and_terminate();
-    courses.read_and_terminate();
-
     Csv::table  scoreboard_table = scoreboard.get_table(),
                 courses_table    = courses.get_table();
     int Nrows = courses_table.num_rows();
@@ -45,13 +38,6 @@ void SMS::view_scoreboard()
 
 void SMS::export_scoreboard_to_csv()
 {
-    Csv::csv_handler scoreboard("db/scoreboard.csv"),
-                     courses("db/courses.csv");
-    if (!scoreboard.init_read() || !courses.init_read())
-        return;
-    scoreboard.read_and_terminate();
-    courses.read_and_terminate();
-
     Csv::table  scoreboard_table = scoreboard.get_table(),
                 courses_table    = courses.get_table();
     int Nrows = courses_table.num_rows();
