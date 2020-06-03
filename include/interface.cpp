@@ -61,67 +61,119 @@ void readline (std::istream& in, Csv::multitype& e)
     e.assign(str);
 }
 
-void Interface::print_table (const table& Table,
-                             const multitype& Table_head,
+void Interface::print_note (const multitype& note,
+                            const multitype& note_head,
+                            bool clrscr,
+                            std::ostream& out)
+{
+    if (clrscr)
+        system("cls"); // windows only
+    out << "[ NOTE: " << note_head << " ]" << std::endl
+        << "____" << std::endl
+        << std::endl
+        << note << std::endl
+        << "____" << std::endl
+        << std::endl;
+}
+
+void Interface::print_table (const table& tabl,
+                             const multitype& tabl_head,
+                             bool vertical,
                              bool clrscr,
                              std::ostream& out)
 {
     if (clrscr)
         system("cls"); // windows only
-    out << "[ TABLE: " << Table_head << " ]" << std::endl
+    out << "[ VIEWING: " << tabl_head << " ]" << std::endl
         << "____" << std::endl
         << std::endl;
 
     list<int> maxl;
-    int Ncols = Table.get_keys().size(),
-        Nrows = Table.num_rows();
+    int Ncols = tabl.get_keys().size(),
+        Nrows = tabl.num_rows();
     maxl.push_back(2);
     for (int i = 0; i < Ncols; ++i)
-        maxl.push_back(strlen(Table.get_keys().at(i).to_str()));
+        maxl.push_back(strlen(tabl.get_keys().at(i).to_str()));
     for (int i = 0; i < Nrows; ++i)
     {
         maxl.at(0) = Max(maxl.at(0), (int)strlen(multitype(i + 1).to_str()));
         for (int j = 0; j < Ncols; ++j)
-            maxl.at(j + 1) = Max(maxl.at(j + 1), (int)strlen(Table.get_row(i).at(j).to_str()));
+            maxl.at(j + 1) = Max(maxl.at(j + 1), (int)strlen(tabl.get_row(i).at(j).to_str()));
     }
 
     // write
-    out << "No  ";
-    for (int i = 0; i < maxl.at(0) - 2; ++i)
-        out << " ";
-    for (int i = 0; i < Ncols; ++i)
+    if (Nrows > 0)
     {
-        multitype e = Table.get_keys().at(i);
-        out << e << "  ";
-        for (int j = 0; j < maxl.at(i + 1) - (int)strlen(e.to_str()); ++j)
-            out << " ";
-    }
-    out << std::endl;
-    for (int i = 0; i < maxl.at(0); ++i)
-        out << "-";
-    out << "  ";
-    for (int i = 0; i < Ncols; ++i)
-    {
-        for (int j = 0; j < maxl.at(i + 1); ++j)
-            out << "-";
-        out << "  ";
-    }
-    out << std::endl;
-    for (int i = 0; i < Nrows; ++i)
-    {
-        multitype e = i + 1;
-        out << e << "  ";
-        for (int j = 0; j < maxl.at(0) - (int)strlen(e.to_str()); ++j)
-            out << " ";
-        for (int j = 0; j < Ncols; ++j)
+        if (vertical)
         {
-            multitype e = Table.get_row(i).at(j);
-            out << e << "  ";
-            for (int k = 0; k < maxl.at(j + 1) - (int)strlen(e.to_str()); ++k)
+            out << "No  ";
+            for (int i = 0; i < maxl.at(0) - 2; ++i)
                 out << " ";
+            for (int i = 0; i < Ncols; ++i)
+            {
+                multitype e = tabl.get_keys().at(i);
+                out << e << "  ";
+                for (int j = 0; j < maxl.at(i + 1) - (int)strlen(e.to_str()); ++j)
+                    out << " ";
+            }
+            out << std::endl;
+            for (int i = 0; i < maxl.at(0); ++i)
+                out << "-";
+            out << "  ";
+            for (int i = 0; i < Ncols; ++i)
+            {
+                for (int j = 0; j < maxl.at(i + 1); ++j)
+                    out << "-";
+                out << "  ";
+            }
+            out << std::endl;
+            for (int i = 0; i < Nrows; ++i)
+            {
+                multitype e = i + 1;
+                out << e << "  ";
+                for (int j = 0; j < maxl.at(0) - (int)strlen(e.to_str()); ++j)
+                    out << " ";
+                for (int j = 0; j < Ncols; ++j)
+                {
+                    multitype e = tabl.get_row(i).at(j);
+                    out << e << "  ";
+                    for (int k = 0; k < maxl.at(j + 1) - (int)strlen(e.to_str()); ++k)
+                        out << " ";
+                }
+                out << std::endl;
+            }
         }
-        out << std::endl;
+        else
+        {
+            int cols_maxl = 2;
+            for (int i = 0; i < Ncols; ++i)
+                cols_maxl = Max(cols_maxl, (int)strlen(tabl.get_keys().at(i).to_str()));
+            for (int i = 0; i < Nrows; ++i)
+            {
+                out << "  No  ";
+                for (int j = 0; j < cols_maxl - 2; ++j)
+                    out << " ";
+                out << (i + 1) << std::endl;
+                for (int j = 0; j < Ncols; ++j)
+                {
+                    multitype e = tabl.get_keys().at(j);
+                    out << "  " << e << "  ";
+                    for (int j = 0; j < cols_maxl - (int)strlen(e.to_str()); ++j)
+                        out << " ";
+                    out << tabl.get_row(i).at(j) << std::endl;
+                }
+                if (i != Nrows - 1)
+                    out << "  --" << std::endl;
+            }
+        }
     }
+    else
+        out << "  Table is empty" << std::endl;
     out << "____" << std::endl
         << std::endl;
+}
+
+void Interface::pause()
+{
+    system("pause");
 }

@@ -1,32 +1,44 @@
 #ifndef INTERFACE_QUYENJD_H
 #define INTERFACE_QUYENJD_H
 
-#include "csv.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include "csv.h"
 
 #define Max(a,b) ((a)>(b)?(a):(b))
 
 // overload operator>> (read) for multitype.
 // after this operation, multitype always has the type of "str".
-extern std::istream& operator>> (std::istream& in, Csv::multitype& e);
+std::istream& operator>> (std::istream& in, Csv::multitype& e);
 
 // overload operator<< (write) for multitype.
-extern std::ostream& operator<< (std::ostream& out, const Csv::multitype& e);
+std::ostream& operator<< (std::ostream& out, const Csv::multitype& e);
 
 // getline for multitype.
-extern void readline (std::istream& in, Csv::multitype& e);
+void readline (std::istream& in, Csv::multitype& e);
 
 namespace Interface
 {
     using namespace Csv;
 
-    extern void print_table (const table& Table,
-                             const multitype& Table_head = "No title",
-                             bool clrscr = true,
-                             std::ostream& out = std::cout);
+    // print a note (/w title).
+    void print_note (const multitype& note,
+                     const multitype& note_head = "No title",
+                     bool clrscr = true,
+                     std::ostream& out = std::cout);
 
+    // print a table (/w title).
+    void print_table (const table& tabl,
+                      const multitype& tabl_head = "No title",
+                      bool vertical = true,
+                      bool clrscr = true,
+                      std::ostream& out = std::cout);
+
+    // pause the console screen (windows only).
+    void pause();
+
+    // a menu of options of which users select one.
     class select_menu
     {
     private:
@@ -100,6 +112,7 @@ namespace Interface
         }
     };
 
+    // a form of requests where users respond to each.
     class input_menu
     {
     private:
