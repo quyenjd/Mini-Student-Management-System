@@ -14,6 +14,7 @@ namespace SMS{
     void viewClass();
     bool filterClass();
     bool filterStudent();
+    void newClass();
 }
 
 

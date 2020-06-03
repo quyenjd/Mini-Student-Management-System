@@ -20,7 +20,11 @@ void removeStudent(){
     Interface::input_menu menu;
     menu.set_title("Delete Student");
     menu.add_item("Student ID: ",false);
-    list<multitype> res=menu.print_menu_and_wait(false);
+    list<multitype> res=menu.print_menu_and_wait(true);
+    if (checkExist(res.at(0))==false){
+        Interface::print_note("The student is not exist","Error");
+        return;
+    }
     students.get_table().rm_row_where("Student ID",res.at(0));
     if (students.init_write()==false){
         return;
@@ -36,6 +40,7 @@ void removeStudent(){
         return;
     }
     coursestudent.write_and_terminate();
+    Interface::print_note("Remove successfully","Result");
 }
 
 void addStudent(){
@@ -78,6 +83,7 @@ void addStudent(){
         return;
     }
     users.write_and_terminate();
+    Interface::print_note("Add successfully","Result");
 }
 
 void editStudent(){
@@ -98,43 +104,40 @@ void editStudent(){
     }
     int num=menu2.print_menu_and_wait().to_int();
     if (num==1){
-        int id;
-        std::cout<<"Insert Student ID: ";
-        std::cin>>id;
-        students.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(id);
-        users.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(id);
-        coursestudent.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(id);
-        std::cin.ignore();
+        Interface::input_menu menu;
+        menu.set_title("Edit Student");
+        menu.add_item("Student ID: ",false);
+        list<multitype> res2=menu.print_menu_and_wait(true);
+        students.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(res2.at(0));
+        users.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(res2.at(0));
+        coursestudent.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
     }
     if (num==2){
-        char* fullname=new char[30];
-        std::cout<<"Insert fullname: ";
-        std::cin.ignore();
-        std::cin.get(fullname,'/n');
-        students.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(fullname);
-        std::cin.ignore();
+        Interface::input_menu menu;
+        menu.set_title("Edit Student");
+        menu.add_item("Fullname: ",true);
+        list<multitype> res2=menu.print_menu_and_wait(true);
+        students.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
     }
     if (num==3){
-        char* dob=new char[30];
-        std::cout<<"Insert date of birth: ";
-        std::cin.ignore();
-        std::cin.get(dob,'/n');
-        students.get_table().get_row_where("Student ID",res.at(0)).at(2).assign(dob);
-        std::cin.ignore();
+        Interface::input_menu menu;
+        menu.set_title("Edit Student");
+        menu.add_item("Date of birth: ",false);
+        list<multitype> res2=menu.print_menu_and_wait(true);
+        students.get_table().get_row_where("Student ID",res.at(0)).at(2).assign(res2.at(0));
     }
     if (num==4){
-        char* Class=new char[30];
-        std::cout<<"Insert class: ";
-        std::cin.ignore();
-        std::cin.get(Class,'/n');
-        students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(Class);
-        std::cin.ignore();
+        Interface::input_menu menu;
+        menu.set_title("Edit Student");
+        menu.add_item("Class: ",false);
+        list<multitype> res2=menu.print_menu_and_wait(true);
+        students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(res.at(0));
     }
     if (students.init_write()==false){
-        std::cout<<"Error!";
         return;
     }
-    students.write_and_terminate(); //paste the table to the csv file
+    students.write_and_terminate();
+    Interface::print_note("Edit successfully","Result");
 }
 
 void updateusers(){
@@ -193,6 +196,42 @@ void viewStudentInClass(){
     list<multitype> res=menu.print_menu_and_wait(false);
     s=res.at(0);
     Interface::print_table(students.get_table().filter(filterStudent),"Students");
+}
+void newClass(){
+    Interface::input_menu menu;
+    menu.set_title("Import Student");
+    menu.add_item("Class: ",false);
+    menu.add_item("File link: ",false);
+    list<multitype> res=menu.print_menu_and_wait(true);
+    csv_handler import(res.at(1).to_str());
+    if (import.init_read()==false){
+        return;
+    }
+    import.read_and_terminate();
+    for (int i=0;i<import.get_table().num_rows();i++){
+        students.get_table().add_row();
+        users.get_table().add_row();
+        students.get_table().get(students.get_table().num_rows()-1,"Student ID").assign(import.get_table().get(i,"Student ID"));
+        users.get_table().get(users.get_table().num_rows()-1,"Student ID").assign(import.get_table().get(i,"Student ID"));
+        students.get_table().get(students.get_table().num_rows()-1,"Fullname").assign(import.get_table().get(i,"Fullname"));
+        students.get_table().get(students.get_table().num_rows()-1,"DoB").assign(import.get_table().get(i,"DoB"));
+        char* dobb=new char[20];
+        char* temp=new char[20];
+        temp=import.get_table().get(i,"DoB").to_str();
+        int j=0;
+        for (int i=0;i<strlen(temp);i++){
+            if (temp[i]!='/'){
+                dobb[j]=temp[i];
+                j++;
+            }
+        }
+        users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(dobb);
+        students.get_table().get(students.get_table().num_rows()-1,"Class").assign(res.at(0));
+    }
+    if (students.init_write()==false){
+        return;
+    }
+    students.write_and_terminate();
 }
 
 }
