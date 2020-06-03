@@ -1,17 +1,20 @@
 #include <cstdio>
 #ifndef FUNCTION_H
 #define FUNCTION_H
-#endif // FUNCTION_H
 #include "csv.h"
 #include "interface.h"
+#include "csv_import.h"
 
-namespace classes{
+namespace SMS{
     void addStudent();
     void removeStudent();
     void editStudent();
     void viewStudentInClass();
-    void updateIDPass();
+    void updateusers();
     void viewClass();
     bool filterClass();
     bool filterStudent();
 }
+
+
+#endif // FUNCTION_H

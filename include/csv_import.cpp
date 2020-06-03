@@ -37,6 +37,7 @@ namespace SMS
         csv_read_util(scoreboard, "scoreboard");
         csv_read_util(semestercourse, "semestercourse");
         csv_read_util(semesters, "semesters");
+        csv_read_util(students, "students");
         csv_read_util(users, "users");
         csv_read_util(years, "years");
         csv_read_util(yearsemester, "yearsemester");
