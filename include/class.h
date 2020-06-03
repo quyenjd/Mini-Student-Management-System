@@ -3,6 +3,7 @@
 #define FUNCTION_H
 #endif // FUNCTION_H
 #include "csv.h"
+#include "interface.h"
 
 namespace classes{
     void addStudent();
@@ -10,4 +11,7 @@ namespace classes{
     void editStudent();
     void viewStudentInClass();
     void updateIDPass();
+    void viewClass();
+    bool filterClass();
+    bool filterStudent();
 }
