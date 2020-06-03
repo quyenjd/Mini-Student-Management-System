@@ -161,6 +161,7 @@ namespace Csv
             Int j = 0;
             for (Int i = 0; i < (Int)strlen(cur); res[j++] = cur[i++]);
             for (Int i = 0; i < (Int)strlen(app); res[j++] = app[i++]);
+            res[j] = '\0';
             assign(res);
             return *this;
         }

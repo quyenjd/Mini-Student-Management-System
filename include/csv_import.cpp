@@ -1,5 +1,6 @@
 #include "csv_import.h"
 #include "interface.h"
+#include <exception>
 
 namespace SMS
 {
@@ -21,7 +22,7 @@ namespace SMS
         {
             Interface::print_note("Importing error!",
                                   Csv::multitype("Database file \"db/").append(filename).append(".csv\" is missing."));
-            throw "Data is corrupted.";
+            throw std::runtime_error("Data is corrupted.");
             return;
         }
         csv.read_and_terminate();

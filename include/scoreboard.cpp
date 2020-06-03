@@ -1,5 +1,6 @@
 #include "scoreboard.h"
 #include "interface.h"
+#include "csv_import.h"
 
 Csv::multitype __filter_courseID;
 bool __filter_courseID_func (Csv::multitype column, Csv::list<Csv::multitype> row, Csv::table tabl)
