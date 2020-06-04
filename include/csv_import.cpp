@@ -4,6 +4,7 @@
 
 namespace SMS
 {
+    csv_handler attendancelist("db/attendancelist.csv");
     csv_handler courselecturer("db/courselecturer.csv");
     csv_handler courses("db/courses.csv");
     csv_handler coursestudent("db/coursestudent.csv");
@@ -30,6 +31,7 @@ namespace SMS
 
     void init_all_csvs()
     {
+        csv_read_util(attendancelist, "attendancelist");
         csv_read_util(courselecturer, "courselecturer");
         csv_read_util(courses, "courses");
         csv_read_util(coursestudent, "coursestudent");

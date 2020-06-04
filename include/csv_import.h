@@ -7,6 +7,7 @@ namespace SMS
 {
     using namespace Csv;
 
+    extern csv_handler attendancelist;
     extern csv_handler courselecturer;
     extern csv_handler courses;
     extern csv_handler coursestudent;
