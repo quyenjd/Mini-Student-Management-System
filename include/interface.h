@@ -80,7 +80,8 @@ namespace Interface
         input_menu();
 
         // add an item to the menu.
-        void add_item (const multitype& desc, bool line_input);
+        // if line_input is false, the function will use istream::operator>> instead of getline.
+        void add_item (const multitype& desc, bool line_input = true);
 
         // remove an item from the menu by description.
         bool remove_item_by_desc (const multitype& desc, bool strict = false);

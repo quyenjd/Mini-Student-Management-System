@@ -132,9 +132,12 @@ namespace Interface
                         out << " ";
                 }
                 out << std::endl;
-                for (int i = 0; i < maxl.at(0); ++i)
-                    out << "-";
-                out << "  ";
+                if (_nocolumn)
+                {
+                    for (int i = 0; i < maxl.at(0); ++i)
+                        out << "-";
+                    out << "  ";
+                }
                 for (int i = 0; i < Ncols; ++i)
                 {
                     for (int j = 0; j < maxl.at(i + 1); ++j)
@@ -144,10 +147,13 @@ namespace Interface
                 out << std::endl;
                 for (int i = 0; i < Nrows; ++i)
                 {
-                    multitype e = i + 1;
-                    out << e << "  ";
-                    for (int j = 0; j < maxl.at(0) - (int)strlen(e.to_str()); ++j)
-                        out << " ";
+                    if (_nocolumn)
+                    {
+                        multitype e = i + 1;
+                        out << e << "  ";
+                        for (int j = 0; j < maxl.at(0) - (int)strlen(e.to_str()); ++j)
+                            out << " ";
+                    }
                     for (int j = 0; j < Ncols; ++j)
                     {
                         multitype e = tabl.get_row(i).at(j);
