@@ -60,7 +60,8 @@ void addStudent(){
     menu.set_title("Add Student");
     menu.add_item("Student ID");
     menu.add_item("Fullname");
-    menu.add_item("Date of birth");
+    menu.add_item("Date of birth (yyyy/mm/dd)");
+    menu.add_item("Gender");
     menu.add_item("Class");
     list<multitype> res=menu.print_menu_and_wait(false);
     if (checkExist(res.at(0))==true){
@@ -71,7 +72,8 @@ void addStudent(){
     students.get_table().get(students.get_table().num_rows()-1,"Student ID").assign(res.at(0));
     students.get_table().get(students.get_table().num_rows()-1,"Fullname").assign(res.at(1));
     students.get_table().get(students.get_table().num_rows()-1,"DoB").assign(res.at(2));
-    students.get_table().get(students.get_table().num_rows()-1,"Class").assign(res.at(3));
+    students.get_table().get(students.get_table().num_rows()-1,"Gender").assign(res.at(3));
+    students.get_table().get(students.get_table().num_rows()-1,"Class").assign(res.at(4));
     if (students.init_write()==false){
         return;
     }
@@ -108,8 +110,9 @@ void editStudent(){
     menu2.add_item(1,"Student ID");
     menu2.add_item(2,"Fullname");
     menu2.add_item(3,"Date of birth");
-    menu2.add_item(4,"Class");
-    menu2.add_item(5,"Exit");
+    menu2.add_item(4,"Gender");
+    menu2.add_item(5,"Class");
+    menu2.add_item(6,"Exit");
     if (checkExist(res.at(0))==false){
         Interface::print_note("The student is not exist","Error");
         return;
@@ -142,7 +145,7 @@ void editStudent(){
         case (3):{
             Interface::input_menu menu;
             menu.set_title("Edit Student");
-            menu.add_item("Date of birth");
+            menu.add_item("Date of birth (yyyy/mm/dd)");
             list<multitype> res2=menu.print_menu_and_wait(true);
             students.get_table().get_row_where("Student ID",res.at(0)).at(2).assign(res2.at(0));
             break;
@@ -150,15 +153,24 @@ void editStudent(){
         case (4):{
             Interface::input_menu menu;
             menu.set_title("Edit Student");
-            menu.add_item("Class");
+            menu.add_item("Gender");
             list<multitype> res2=menu.print_menu_and_wait(true);
-            students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(res.at(0));
+            students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(res2.at(0));
             break;
         }
-        case (5):break;
+        case (5):{
+            Interface::input_menu menu;
+            menu.set_title("Edit Student");
+            menu.add_item("Class");
+            list<multitype> res2=menu.print_menu_and_wait(true);
+            students.get_table().get_row_where("Student ID",res.at(0)).at(4).assign(res.at(0));
+            break;
+        }
+        case (6):break;
+        default : break;
         }
     }
-    while (num!=5);
+    while (num!=6);
     if (students.init_write()==false){
         return;
     }
@@ -215,7 +227,7 @@ multitype s;
 bool filterStudent (multitype column,list<multitype> row,table tb){
     if (!column.equal("Fullname"))
         return false;
-    return row.at(3).equal(s);
+    return row.at(4).equal(s);
 }
 
 void viewClass(){
@@ -251,6 +263,7 @@ void newClass(){
         users.get_table().get(users.get_table().num_rows()-1,"ID").assign(import.get_table().get(i,"Student ID"));
         students.get_table().get(students.get_table().num_rows()-1,"Fullname").assign(import.get_table().get(i,"Fullname"));
         students.get_table().get(students.get_table().num_rows()-1,"DoB").assign(import.get_table().get(i,"DoB"));
+        students.get_table().get(students.get_table().num_rows()-1,"Gender").assign(import.get_table().get(i,"Gender"));
         char* dobb=new char[20];
         char* temp=new char[20];
         temp=import.get_table().get(i,"DoB").to_str();
