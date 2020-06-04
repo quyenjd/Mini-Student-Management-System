@@ -174,7 +174,7 @@ void staff_menu()
     void (*__main[])() = {staff_menu__student, staff_menu__class, staff_menu__year,
                           staff_menu__semester, staff_menu__course, staff_menu__lecturer,
                           staff_menu__scoreboard, staff_menu__attendance_list};
-    operations_driver(8, staff_operations__main, __main, multitype("Welcome Staff @").append(authorized_userid));
+    operations_driver(8, staff_operations__main, __main, "Main menu");
 }
 
 void lecturer_menu()
@@ -190,7 +190,7 @@ void lecturer_menu()
     void (*__main[])() = {view_course_of_semester, view_students_of_course,
                           view_attendance_list, edit_attendance,
                           import_scoreboard, edit_scoreboard, view_scoreboard};
-    operations_driver(7, lecturer_operations__main, __main, multitype("Welcome Lecturer @").append(authorized_userid));
+    operations_driver(7, lecturer_operations__main, __main, "Main menu");
 }
 
 void student_menu__checkin()
@@ -222,7 +222,7 @@ void student_menu()
                                            };
     void (*__main[])() = {student_menu__checkin, student_menu__view_checkin,
                           student_menu__view_schedules, student_menu__view_scoreboard};
-    operations_driver(4, student_operations__main, __main, multitype("Welcome Student @").append(authorized_userid));
+    operations_driver(4, student_operations__main, __main, "Main menu");
 }
 
 
