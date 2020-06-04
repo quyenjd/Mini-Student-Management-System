@@ -18,7 +18,7 @@ namespace SMS
             }
         }
         years.get_table().add_row();
-        years.get_table().get_row(years.get_table().num_rows()-1).at(0).assign(years.get_table().num_rows());
+        years.get_table().get_row(years.get_table().num_rows()-1).at(0).assign(years.get_table().get_row(years.get_table().num_rows()-2).at(0).to_int()+1);
         years.get_table().get_row(years.get_table().num_rows()-1).at(1).assign(res.at(0));
         Interface::print_note ("Added school year successfully","Success");
         years.init_write();
@@ -61,7 +61,7 @@ namespace SMS
                 //add semester to yearsemester.csv
                 yearsemester.get_table().add_row();
                 yearsemester.get_table().get_row(yearsemester.get_table().num_rows()-1).at(0).assign(select);
-                yearsemester.get_table().get_row(yearsemester.get_table().num_rows()-1).at(1).assign(yearsemester.get_table().num_rows());
+                yearsemester.get_table().get_row(yearsemester.get_table().num_rows()-1).at(1).assign(yearsemester.get_table().get_row(yearsemester.get_table().num_rows()-2).at(1).to_int()+1);
 
                 //add semester to semesters.csv
                 semesters.get_table().add_row();
@@ -84,7 +84,7 @@ namespace SMS
     void create_new_course_manually() {
         Interface::input_menu menu;
         menu.set_title("New Course Information");
-        menu.add_item("Course ID";
+        menu.add_item("Course ID");
         menu.add_item("Course Name");
         menu.add_item("Class");
         menu.add_item("Start Date (YYYY/MM/DD)");
@@ -107,8 +107,33 @@ namespace SMS
         }
 
         courses.get_table().add_row();
-        for (int j=0;j<12;j++) courses.get_table().get_row(courses.get_table().num_rows()-1).at(j).assign(res.at(j));
+        for (int j=0;j<11;j++) courses.get_table().get_row(courses.get_table().num_rows()-1).at(j).assign(res.at(j));
+
         Interface::print_note("Added course successfully","Success");
+
+        //Add student to course default
+        for (int j=0;j<students.get_table().num_rows();j++) {
+            if (students.get_table().get_row(j).at(4).equal(courses.get_table().get_row(courses.get_table().num_rows()-1).at(2))) {
+                int checkk=0;
+                    for (int k=0;k<coursestudent.get_table().num_rows();k++) {
+                        if (students.get_table().get_row(j).at(0).equal(coursestudent.get_table().get_row(k).at(1)) && coursestudent.get_table().get_row(k).at(0).equal(courses.get_table().get_row(courses.get_table().num_rows()-1).at(0))) {
+                            checkk=1;
+                            break;
+                        }
+                    }
+                if (checkk==0) {
+                    coursestudent.get_table().add_row();
+                    coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(0).assign(courses.get_table().get_row(courses.get_table().num_rows()-1).at(0));
+                    coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(1).assign(students.get_table().get_row(j).at(0));
+                }
+            }
+        }
+
+        Interface::print_note(multitype("Added all student from clase ").append(courses.get_table().get_row(courses.get_table().num_rows()-1).at(2)).append("successfully"),"success");
+
+        coursestudent.init_write();
+        coursestudent.write_and_terminate();
+
         courses.init_write();
         courses.write_and_terminate();
         Interface::pause();
@@ -130,7 +155,7 @@ namespace SMS
                 Interface::input_menu menu;
 
                 menu.set_title("Edit Course Information");
-                menu.add_item("Course ID");
+                //menu.add_item("Course ID");
                 menu.add_item("Course Name");
                 menu.add_item("Class");
                 menu.add_item("Start Date (YYYY/MM/DD)");
@@ -144,7 +169,7 @@ namespace SMS
 
                 list<multitype> res=menu.print_menu_and_wait();
 
-                for (int j=0;j<12;j++) courses.get_table().get_row(select-1).at(j).assign(res.at(j));
+                for (int j=0;j<11;j++) courses.get_table().get_row(select-1).at(j+1).assign(res.at(j));
 
                 Interface::print_note("Edited course successful","Success");
                 courses.init_write();
@@ -255,24 +280,6 @@ namespace SMS
 
                 list<multitype> res=student_menu.print_menu_and_wait();
 
-                //Add student default
-                for (int j=0;j<students.get_table().num_rows();j++) {
-                    if (students.get_table().get_row(j).at(3).equal(courses.get_table().get_row(select-1).at(2))) {
-                        int checkk=0;
-                        for (int k=0;k<coursestudent.get_table().num_rows();k++) {
-                            if (students.get_table().get_row(j).at(0).equal(coursestudent.get_table().get_row(k).at(1)) && coursestudent.get_table().get_row(k).at(0).equal(courses.get_table().get_row(select-1).at(0))) {
-                                checkk=1;
-                                break;
-                            }
-                        }
-                        if (checkk==0) {
-                            coursestudent.get_table().add_row();
-                            coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(0).assign(courses.get_table().get_row(select-1).at(0));
-                            coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(1).assign(students.get_table().get_row(j).at(0));
-                        }
-                    }
-                }
-
                 int check=0;
                 for (int j=0;j<students.get_table().num_rows();j++) {
                     if (students.get_table().get_row(j).at(0).equal(res.at(0))) {
@@ -286,13 +293,18 @@ namespace SMS
                     Interface::pause();
                     continue;
                 }
-
+                int checkk=0;
                 for (int j=0;j<coursestudent.get_table().num_rows();j++) {
                     if (coursestudent.get_table().get_row(j).at(0).equal(courses.get_table().get_row(select-1).at(0)) && coursestudent.get_table().get_row(j).at(1).equal(res.at(0))) {
-                        Interface::print_note("This student has already been in this course","Failed");
-                        Interface::pause();
-                        continue;
+                        checkk=1;
+                        break;
                     }
+                }
+
+                if (checkk==1) {
+                    Interface::print_note("This student has already been in this course","Failed");
+                    Interface::pause();
+                    continue;
                 }
 
                 //add student to coursestudent.csv
@@ -325,23 +337,6 @@ namespace SMS
                 student_menu.set_title("Removed Student's Information");
                 student_menu.add_item("Student Remove ID");
                 list<multitype> res=student_menu.print_menu_and_wait();
-
-                for (int j=0;j<students.get_table().num_rows();j++) {
-                    if (students.get_table().get_row(j).at(3).equal(courses.get_table().get_row(select-1).at(2))) {
-                        int checkk=0;
-                        for (int k=0;k<coursestudent.get_table().num_rows();k++) {
-                            if (students.get_table().get_row(j).at(0).equal(coursestudent.get_table().get_row(k).at(1)) && coursestudent.get_table().get_row(k).at(0).equal(courses.get_table().get_row(select-1).at(0))) {
-                                checkk=1;
-                                break;
-                            }
-                        }
-                        if (checkk==0) {
-                            coursestudent.get_table().add_row();
-                            coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(0).assign(courses.get_table().get_row(select-1).at(0));
-                            coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(1).assign(students.get_table().get_row(j).at(0));
-                        }
-                    }
-                }
 
                 int check=0;
 
@@ -401,12 +396,17 @@ namespace SMS
                     continue;
                 }
 
+                int checkk=0;
                 for (int j=0;j<courselecturer.get_table().num_rows();j++) {
                     if (courselecturer.get_table().get_row(j).at(0).equal(courses.get_table().get_row(select-1).at(0)) && courselecturer.get_table().get_row(j).at(1).equal(res.at(0))) {
-                        Interface::print_note("This lecturer has already been in this course","Failed");
-                        Interface::pause();
-                        continue;
+                        checkk=1;
+                        break;
                     }
+                }
+                if (checkk==1) {
+                    Interface::print_note("This lecturer has already been in this course","Failed");
+                    Interface::pause();
+                    continue;
                 }
 
                 //add lecturer to courselecturer.csv
@@ -560,7 +560,7 @@ namespace SMS
             select=course_menu.print_menu_and_wait().to_int();
 
             for (int j=0;j<students.get_table().num_rows();j++) {
-                if (students.get_table().get_row(j).at(3).equal(courses.get_table().get_row(select-1).at(2))) {
+                if (students.get_table().get_row(j).at(4).equal(courses.get_table().get_row(select-1).at(2))) {
                     int checkk=0;
                     for (int k=0;k<coursestudent.get_table().num_rows();k++) {
                         if (students.get_table().get_row(j).at(0).equal(coursestudent.get_table().get_row(k).at(1)) && coursestudent.get_table().get_row(k).at(0).equal(courses.get_table().get_row(select-1).at(0))) {
@@ -594,11 +594,6 @@ namespace SMS
         } while (select != courses.get_table().num_rows()+1);
     }
 
-    void view_all_lecturers() { //checked
-        Interface::print_table(lecturers.get_table(),"Lecturer List");
-    }
-
-
     multitype Lec_CID;
 
     bool filter_lecturers (multitype column, list<multitype> row, table tble) {
@@ -613,7 +608,7 @@ namespace SMS
         return false;
     }
 
-    void view_lecturers_of_course() {   //checked
+   /* void view_lecturers_of_course() {   //checked
         Interface::select_menu course_menu;
         course_menu.set_title("Courses");
         for (int i=0;i<courses.get_table().num_rows();i++) {
@@ -640,7 +635,7 @@ namespace SMS
             }
 
         } while (select != courses.get_table().num_rows()+1);
-    }
+    }*/
 
     void add_course_to_semester() { //checked
         Interface::select_menu semester_menu;
@@ -776,5 +771,191 @@ namespace SMS
             }
         } while (select_semester != semesters.get_table().num_rows()+1);
 
+    }
+
+    void import_course_from_csv() {
+        Interface::select_menu semester_menu;
+        semester_menu.set_title("Semesters");
+        for (int i=0;i<semesters.get_table().num_rows();i++) {
+            semester_menu.add_item(i+1,semesters.get_table().get_row(i).at(1));
+        }
+        semester_menu.add_item(semesters.get_table().num_rows()+1,"Back");
+
+        int select_semester;
+
+        do {
+            select_semester = semester_menu.print_menu_and_wait().to_int();
+            if (select_semester >=1 && select_semester <= semesters.get_table().num_rows()) {
+
+                Interface::input_menu file_menu;
+                file_menu.set_title(multitype("Import course file to ").append(semesters.get_table().get_row(select_semester-1).at(1)));
+                file_menu.add_item("File name");
+                list<multitype> res=file_menu.print_menu_and_wait();
+
+                csv_handler course_add(res.at(0).to_str());
+                if (!course_add.init_read()) {
+                    Interface::print_note(multitype("Your file '").append(res.at(0)).append("' is corrupted. Please try again"),"Failed");
+                    Interface::pause();
+                    continue;
+                }
+                course_add.read_and_terminate();
+
+                for (int i=0;i<course_add.get_table().num_rows();i++) {
+                    int check=0;
+                    for (int j=0;j<courses.get_table().num_rows();j++) {
+                        if (courses.get_table().get_row(j).at(0).equal(course_add.get_table().get_row(i).at(0))) {
+                            check=1;
+                            break;
+                        }
+                    }
+                    if (check==0) {
+                        courses.get_table().add_row();
+                        for (int j=0;j<11;j++) {
+                            courses.get_table().get_row(courses.get_table().num_rows()-1).at(j).assign(course_add.get_table().get_row(i).at(j));
+                        }
+                    }
+                }
+
+                courses.init_write();
+                courses.write_and_terminate();
+
+                for (int i=0;i<course_add.get_table().num_rows();i++) {
+                    int check_c=0;
+                    for (int j=0;j<semestercourse.get_table().num_rows();j++) {
+                        if (semestercourse.get_table().get_row(j).at(1).equal(course_add.get_table().get_row(i).at(0)) && semestercourse.get_table().get_row(j).at(0).equal(semesters.get_table().get_row(select_semester-1).at(0))) {
+                            check_c=1;
+                            break;
+                        }
+                    }
+                    if (check_c==0) {
+                        semestercourse.get_table().add_row();
+                        semestercourse.get_table().get_row(semestercourse.get_table().num_rows()-1).at(0).assign(semesters.get_table().get_row(select_semester-1).at(0));
+                        semestercourse.get_table().get_row(semestercourse.get_table().num_rows()-1).at(1).assign(course_add.get_table().get_row(i).at(0));
+
+                        for (int t=0;t<students.get_table().num_rows();t++) {
+                            if (students.get_table().get_row(t).at(4).equal(course_add.get_table().get_row(i).at(2))) {
+                                int checkk=0;
+                                for (int k=0;k<coursestudent.get_table().num_rows();k++) {
+                                    if (students.get_table().get_row(t).at(0).equal(coursestudent.get_table().get_row(k).at(1)) && coursestudent.get_table().get_row(k).at(0).equal(course_add.get_table().get_row(i).at(0))) {
+                                        checkk=1;
+                                        break;
+                                    }
+                                }
+                                if (checkk==0) {
+                                    coursestudent.get_table().add_row();
+                                    coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(0).assign(course_add.get_table().get_row(i).at(0));
+                                    coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(1).assign(students.get_table().get_row(t).at(0));
+                                }
+                            }
+                        }
+                    }
+                }
+                Interface::print_note("Imported course file successfully","Success");
+                coursestudent.init_write();
+                coursestudent.write_and_terminate();
+
+                semestercourse.init_write();
+                semestercourse.write_and_terminate();
+                Interface::pause();
+            }
+        } while (select_semester != semesters.get_table().num_rows()+1);
+    }
+
+    multitype student_id_check;
+    bool filter_student_and_course(multitype column, list<multitype> row, table tble) {
+        return column.equal("Course ID") && row.at(tble.get_key("Student ID")).equal(student_id_check);
+    }
+
+    list<multitype> list_course_id;
+    bool filter_schedule (multitype column, list<multitype> row, table tble) {
+        for (int i=0;i<list_course_id.size();i++) {
+            if (row.at(tble.get_key("Course ID")).equal(list_course_id.at(i))) return true;
+        }
+        return false;
+    }
+
+    void view_schedule_of_student(multitype student_id) {
+        student_id_check=student_id;
+        table new_student_table=coursestudent.get_table().filter(filter_student_and_course);
+
+        list_course_id.destroy();
+        for (int i=0;i<new_student_table.num_rows();i++) {
+            list_course_id.push_back(new_student_table.get_row(i).at(0));
+        }
+
+        table schedule_table= courses.get_table().filter(filter_schedule);
+        Interface::print_table(schedule_table,student_id.append("'s Schedule"));
+        Interface::pause();
+    }
+
+    bool filter_year(multitype column, list<multitype> row, table tble) {
+        return column.equal("Year name");
+    }
+    void view_all_academic_year() {
+        Interface::print_table(years.get_table().filter(filter_year),"School Years");
+        Interface::pause();
+    }
+
+    void view_semester_in_academic_year() {
+        Interface::select_menu year_menu;
+        year_menu.set_title("School Year");
+
+        //Show menu years to choose
+        for (int i=0;i<years.get_table().num_rows();i++) {
+            year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
+        }
+
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
+        int select;
+
+        do {
+            select=year_menu.print_menu_and_wait().to_int();
+            if (select >=1 && select <= years.get_table().num_rows()) {
+                year_selection=years.get_table().get_row(select-1).at(0);
+                table new_year_table=yearsemester.get_table().filter(filter_semester);
+                cout << new_year_table.num_rows();
+                semester_id_list.destroy();
+                for (int j=0;j<new_year_table.num_rows();j++) {
+                    semester_id_list.push_back(new_year_table.get_row(j).at(0));
+                }
+
+
+                table new_semester_table=semesters.get_table().filter(filter_semester_name);
+
+                Interface::print_table(new_semester_table,multitype("Semester of year ").append(years.get_table().get_row(select-1).at(1)));
+                Interface::pause();
+
+            }
+        } while (select != years.get_table().num_rows()+1);
+    }
+
+    void delete_academic_year() {
+        Interface::select_menu year_menu;
+        year_menu.set_title("School Year");
+
+        //Show menu years to choose
+        for (int i=0;i<years.get_table().num_rows();i++) {
+            year_menu.add_item(i+1,years.get_table().get_row(i).at(1));
+        }
+
+        year_menu.add_item(years.get_table().num_rows()+1,"Back");
+        int select;
+        do {
+            select=year_menu.print_menu_and_wait().to_int();
+            if (select >=1 && select <= years.get_table().num_rows()) {
+                while (yearsemester.get_table().rm_row_where("Year ID",years.get_table().get_row(select-1).at(0)));
+                years.get_table().rm_row(select-1);
+                Interface::print_note("Remove school year successfully", "Success");
+
+                yearsemester.init_write();
+                yearsemester.write_and_terminate();
+
+                years.init_write();
+                years.write_and_terminate();
+
+                Interface::pause();
+                break;
+            }
+        } while (select != years.get_table().num_rows()+1);
     }
 };

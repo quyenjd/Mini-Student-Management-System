@@ -8,40 +8,48 @@ using namespace Csv;
 using namespace std;
 namespace SMS
 {
-    void create_academic_year();
+    void create_academic_year();    //create new academic year
 
-    void add_new_semester_to_academic_year();
+    void add_new_semester_to_academic_year();   //create a semester and add to one specific academic year
 
-    void create_new_course_manually();
+    void create_new_course_manually();  //add new course to courses.csv manually
 
-    void update_course_manually();
+    void update_course_manually();  //update a course in courses.csv manually // edit a course
 
-    void delete_course();
+    void delete_course();   //delete a course in courses.csv
 
-    void update_academic_year_name();
+    void update_academic_year_name();   //change name of an academic year
 
-    void update_semester_name();
+    void update_semester_name();    // change name of an semester
 
-    void add_student_to_course();
+    void add_student_to_course();   // add new student to a course (choose course from menu)
 
-    void remove_student_from_course();
+    void remove_student_from_course(); // remove student from a course (choose course from menu)
 
-    void add_lecturer_to_course();
+    void add_lecturer_to_course(); // add new lecturer to a course (choose course from menu)
 
-    void remove_lecturer_from_course();
+    void remove_lecturer_from_course(); //remove lecturer from a course (choose course from menu)
 
-    void delete_semester_from_academic_year();
+    void delete_semester_from_academic_year(); //like name of function
 
-    void add_course_to_semester();
+    void add_course_to_semester(); // add a course to a semester (choose semester from menu)
 
-    void view_students_of_course();
+    void view_students_of_course(); // Choose a course and view list of students
 
-    void view_all_lecturers();
+    //void view_lecturers_of_course();    // view lecturers in a course
 
-    void view_lecturers_of_course();
+    void delete_course_from_semester(); // like name of function
 
-    void delete_course_from_semester();
+    void view_course_of_semester(); //view list courses in a semester
 
-    void view_course_of_semester();
+    void import_course_from_csv();  //import course from csv to a semester
+
+    void view_schedule_of_student(multitype student_id);    // Student's Schedule
+
+    void view_all_academic_year(); // view list of academic year
+
+    void view_semester_in_academic_year(); // view list semester in a academic year
+
+    void delete_academic_year();
 };
 #endif // COURSES_H
