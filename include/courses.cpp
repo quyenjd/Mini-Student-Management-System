@@ -1,5 +1,5 @@
 #include "courses.h"
-#include <iostream>
+#include "attendancelist.h"
 using namespace Csv;
 using namespace std;
 namespace SMS
@@ -594,49 +594,6 @@ namespace SMS
         } while (select != courses.get_table().num_rows()+1);
     }
 
-    multitype Lec_CID;
-
-    bool filter_lecturers (multitype column, list<multitype> row, table tble) {
-        return column.equal("Lecturer username") && row.at(tble.get_key("Course ID")).equal(Lec_CID);
-    }
-
-    list<multitype> new_lecturers_list;
-    bool filter_lecturer_course (multitype column, list<multitype> row, table tble) {
-        for (int i=0;i<new_lecturers_list.size();i++) {
-            if (row.at(tble.get_key("Username")).equal(new_lecturers_list.at(i))) return true;
-        }
-        return false;
-    }
-
-   /* void view_lecturers_of_course() {   //checked
-        Interface::select_menu course_menu;
-        course_menu.set_title("Courses");
-        for (int i=0;i<courses.get_table().num_rows();i++) {
-            course_menu.add_item(i+1,courses.get_table().get_row(i).at(0));
-        }
-        course_menu.add_item(courses.get_table().num_rows()+1,"Back");
-
-        int select;
-
-        do {
-            select=course_menu.print_menu_and_wait().to_int();
-            if (select >=1 && select <= courses.get_table().num_rows()) {
-                Lec_CID = courses.get_table().get_row(select-1).at(0);
-                table new_lecturer_table=courselecturer.get_table().filter(filter_lecturers);
-
-                new_lecturers_list.destroy();
-                for (int j=0;j<new_lecturer_table.num_rows();j++) {
-                    new_lecturers_list.push_back(new_lecturer_table.get_row(j).at(0));
-                }
-
-                table lecturer_in_course_table= lecturers.get_table().filter(filter_lecturer_course);
-                Interface::print_table(lecturer_in_course_table,multitype("Lecturer List of ").append(courses.get_table().get_row(select-1).at(0)));
-                Interface::pause();
-            }
-
-        } while (select != courses.get_table().num_rows()+1);
-    }*/
-
     void add_course_to_semester() { //checked
         Interface::select_menu semester_menu;
         semester_menu.set_title("Semesters");
@@ -868,8 +825,14 @@ namespace SMS
 
     list<multitype> list_course_id;
     bool filter_schedule (multitype column, list<multitype> row, table tble) {
+        date d; d.now();
         for (int i=0;i<list_course_id.size();i++) {
-            if (row.at(tble.get_key("Course ID")).equal(list_course_id.at(i))) return true;
+            if (row.at(tble.get_key("Course ID")).equal(list_course_id.at(i))) {
+                date st,en;
+                st.parse(row.at(tble.get_key("Start date")), "YYYY/MM/DD");
+                en.parse(row.at(tble.get_key("End date")), "YYYY/MM/DD");
+                return d >= st && d <= en;
+            }
         }
         return false;
     }
@@ -913,7 +876,6 @@ namespace SMS
             if (select >=1 && select <= years.get_table().num_rows()) {
                 year_selection=years.get_table().get_row(select-1).at(0);
                 table new_year_table=yearsemester.get_table().filter(filter_semester);
-                cout << new_year_table.num_rows();
                 semester_id_list.destroy();
                 for (int j=0;j<new_year_table.num_rows();j++) {
                     semester_id_list.push_back(new_year_table.get_row(j).at(0));
