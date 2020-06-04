@@ -21,9 +21,9 @@ namespace SMS
         years.get_table().get_row(years.get_table().num_rows()-1).at(0).assign(years.get_table().num_rows());
         years.get_table().get_row(years.get_table().num_rows()-1).at(1).assign(res.at(0));
         Interface::print_note ("Added school year successfully","Success");
-        Interface::pause();
         years.init_write();
         years.write_and_terminate();
+        Interface::pause();
     }
 
     void add_new_semester_to_academic_year() {  //checked
@@ -69,13 +69,13 @@ namespace SMS
                 semesters.get_table().get_row(semesters.get_table().num_rows()-1).at(1).assign(res.at(0));
 
                 Interface::print_note ("Added semester successfully","Success");
-                Interface::pause();
 
                 yearsemester.init_write();
                 yearsemester.write_and_terminate();
 
                 semesters.init_write();
                 semesters.write_and_terminate();
+                Interface::pause();
             }
         } while (select!=years.get_table().num_rows()+1);
     }
@@ -109,9 +109,9 @@ namespace SMS
         courses.get_table().add_row();
         for (int j=0;j<12;j++) courses.get_table().get_row(courses.get_table().num_rows()-1).at(j).assign(res.at(j));
         Interface::print_note("Added course successfully","Success");
-        Interface::pause();
         courses.init_write();
         courses.write_and_terminate();
+        Interface::pause();
     }
 
     void update_course_manually() { //checked
@@ -147,10 +147,10 @@ namespace SMS
                 for (int j=0;j<12;j++) courses.get_table().get_row(select-1).at(j).assign(res.at(j));
 
                 Interface::print_note("Edited course successful","Success");
+                courses.init_write();
+                courses.write_and_terminate();
                 Interface::pause();
             }
-            courses.init_write();
-            courses.write_and_terminate();
         } while (select != courses.get_table().num_rows()+1);
 
 
@@ -170,9 +170,9 @@ namespace SMS
             if (select>=1 && select <= courses.get_table().num_rows()) {
                 courses.get_table().rm_row(select-1);
                 Interface::print_note("Removed course successfully","Success");
-                Interface::pause();
                 courses.init_write();
                 courses.write_and_terminate();
+                Interface::pause();
             }
         } while (select != courses.get_table().num_rows()+1);
     }
@@ -199,9 +199,9 @@ namespace SMS
 
                 years.get_table().get_row(select-1).at(1).assign(res.at(0));
                 Interface::print_note("Edit School Year's Name Successfully","Success");
-                Interface::pause();
                 years.init_write();
                 years.write_and_terminate();
+                Interface::pause();
             }
         } while (select != years.get_table().num_rows()+1);
 
@@ -228,9 +228,9 @@ namespace SMS
                 semesters.get_table().get_row(select-1).at(1).assign(res.at(0));
 
                 Interface::print_note ("Edit Semester's Name Successfully","Success");
-                Interface::pause();
                 semesters.init_write();
                 semesters.write_and_terminate();
+                Interface::pause();
             }
         } while (select != semesters.get_table().num_rows()+1);
     }
@@ -300,9 +300,9 @@ namespace SMS
                 coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(0).assign(courses.get_table().get_row(select-1).at(0));
                 coursestudent.get_table().get_row(coursestudent.get_table().num_rows()-1).at(1).assign(res.at(0));
                 Interface::print_note("Added Student To Course Successfully","Success");
-                Interface::pause();
                 coursestudent.init_write();
                 coursestudent.write_and_terminate();
+                Interface::pause();
             }
         } while (select != courses.get_table().num_rows()+1);
 
@@ -349,11 +349,12 @@ namespace SMS
                     if (coursestudent.get_table().get_row(j).at(1).equal(res.at(0)) && coursestudent.get_table().get_row(j).at(0).equal(courses.get_table().get_row(select-1).at(0))) {
                         coursestudent.get_table().rm_row(j);
                         check=1;
-                        coursestudent.init_write();
-                        coursestudent.write_and_terminate();
                         break;
                     }
                 }
+
+                coursestudent.init_write();
+                coursestudent.write_and_terminate();
 
                 if (check==0) {
                     Interface::print_note(multitype("No Students With ID:").append(res.at(0)).append(" Found In This Course"), "Failed");
@@ -414,9 +415,9 @@ namespace SMS
                 courselecturer.get_table().get_row(courselecturer.get_table().num_rows()-1).at(1).assign(res.at(0));
                 Interface::print_note("Added lecturer to selected course successfully","Success");
 
-                Interface::pause();
                 courselecturer.init_write();
                 courselecturer.write_and_terminate();
+                Interface::pause();
             }
         } while (select != courses.get_table().num_rows()+1);
 
