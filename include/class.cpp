@@ -28,7 +28,7 @@ void removeStudent(){
     using namespace Csv;
     Interface::input_menu menu;
     menu.set_title("Delete Student");
-    menu.add_item("Student ID: ",true);
+    menu.add_item("Student ID");
     list<multitype> res=menu.print_menu_and_wait(true);
     if (checkExist(res.at(0))==false){
         Interface::print_note("The student is not exist","Error");
@@ -58,10 +58,10 @@ void addStudent(){
     using namespace Csv;
     Interface::input_menu menu;
     menu.set_title("Add Student");
-    menu.add_item("Student ID: ",true);
-    menu.add_item("Fullname: ",true);
-    menu.add_item("Date of birth: ",true);
-    menu.add_item("Class: ",true);
+    menu.add_item("Student ID");
+    menu.add_item("Fullname");
+    menu.add_item("Date of birth");
+    menu.add_item("Class");
     list<multitype> res=menu.print_menu_and_wait(false);
     if (checkExist(res.at(0))==true){
         Interface::print_note("The student is exist","Error");
@@ -101,7 +101,7 @@ void editStudent(){
     using namespace Csv;
     Interface::input_menu menu;
     menu.set_title("Edit Student");
-    menu.add_item("Student ID: ",true);
+    menu.add_item("Student ID");
     list<multitype> res=menu.print_menu_and_wait(true);
     Interface::select_menu menu2;
     menu2.set_title(multitype("Editing student ").append(res.at(0)));
@@ -122,7 +122,7 @@ void editStudent(){
         case (1):{
             Interface::input_menu menu;
             menu.set_title("Edit Student");
-            menu.add_item("Student ID: ",true);
+            menu.add_item("Student ID");
             list<multitype> res2=menu.print_menu_and_wait(true);
             students.get_table().get_row_where("Student ID",res.at(0)).at(0).assign(res2.at(0));
             users.get_table().get_row_where("ID",res.at(0)).at(0).assign(res2.at(0));
@@ -134,7 +134,7 @@ void editStudent(){
         case (2):{
             Interface::input_menu menu;
             menu.set_title("Edit Student");
-            menu.add_item("Fullname: ",true);
+            menu.add_item("Fullname");
             list<multitype> res2=menu.print_menu_and_wait(true);
             students.get_table().get_row_where("Student ID",res.at(0)).at(1).assign(res2.at(0));
             break;
@@ -142,7 +142,7 @@ void editStudent(){
         case (3):{
             Interface::input_menu menu;
             menu.set_title("Edit Student");
-            menu.add_item("Date of birth: ",true);
+            menu.add_item("Date of birth");
             list<multitype> res2=menu.print_menu_and_wait(true);
             students.get_table().get_row_where("Student ID",res.at(0)).at(2).assign(res2.at(0));
             break;
@@ -150,7 +150,7 @@ void editStudent(){
         case (4):{
             Interface::input_menu menu;
             menu.set_title("Edit Student");
-            menu.add_item("Class: ",true);
+            menu.add_item("Class");
             list<multitype> res2=menu.print_menu_and_wait(true);
             students.get_table().get_row_where("Student ID",res.at(0)).at(3).assign(res.at(0));
             break;
@@ -226,7 +226,7 @@ void viewClass(){
 void viewStudentInClass(){
     Interface::input_menu menu;
     menu.set_title("View Student");
-    menu.add_item("Class: ",true);
+    menu.add_item("Class");
     list<multitype> res=menu.print_menu_and_wait(false);
     s=res.at(0);
     Interface::print_table(students.get_table().filter(filterStudent),"Students");
@@ -234,11 +234,13 @@ void viewStudentInClass(){
 void newClass(){
     Interface::input_menu menu;
     menu.set_title("Import Student");
-    menu.add_item("Class: ",true);
-    menu.add_item("File link: ",true);
+    menu.add_item("Class");
+    menu.add_item("File link");
     list<multitype> res=menu.print_menu_and_wait(true);
     csv_handler import(res.at(1).to_str());
     if (import.init_read()==false){
+        Interface::print_note(Csv::multitype("Your file '").append(res.at(1)).append("' is corrupted. Please try again."), "Failed");
+        Interface::pause();
         return;
     }
     import.read_and_terminate();
