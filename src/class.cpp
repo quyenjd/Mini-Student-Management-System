@@ -1,7 +1,5 @@
-#include <cstdio>
-#include <iostream>
 #include "class.h"
-#include "attendancelist.h"
+#include "date.h"
 
 namespace SMS{
 
@@ -79,9 +77,7 @@ namespace SMS{
         users.get_table().add_row();
         users.get_table().get(users.get_table().num_rows()-1,"ID").assign(res.at(0));
         users.get_table().get(users.get_table().num_rows()-1,"Role").assign("Student");
-        date d;
-        d.parse(res.at(2), "YYYY/MM/DD");
-        users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(d.compile("YYYYMMDD"));
+        users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(date().parse(res.at(2), "YYYY/MM/DD").compile("YYYYMMDD"));
         if (users.init_write()==false){
             return;
         }
@@ -180,9 +176,7 @@ namespace SMS{
             users.get_table().add_row();
             users.get_table().get(users.get_table().num_rows()-1,"ID").assign(students.get_table().get(i,"Student ID").to_str());
             users.get_table().get(users.get_table().num_rows()-1,"Role").assign("Student");
-            date d;
-            d.parse(students.get_table().get(i,"DoB"), "YYYY/MM/DD");
-            users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(d.compile("YYYYMMDD"));
+            users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(date().parse(students.get_table().get(i,"DoB"), "YYYY/MM/DD").compile("YYYYMMDD"));
             if (users.init_write()==false){
                 return;
             }
@@ -243,9 +237,7 @@ namespace SMS{
             students.get_table().get(students.get_table().num_rows()-1,"Fullname").assign(import.get_table().get(i,"Fullname"));
             students.get_table().get(students.get_table().num_rows()-1,"DoB").assign(import.get_table().get(i,"DoB"));
             students.get_table().get(students.get_table().num_rows()-1,"Gender").assign(import.get_table().get(i,"Gender"));
-            date d;
-            d.parse(import.get_table().get(i,"DoB"), "YYYY/MM/DD");
-            users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(d.compile("YYYYMMDD"));
+            users.get_table().get(users.get_table().num_rows()-1,"Pass").assign(date().parse(import.get_table().get(i,"DoB"), "YYYY/MM/DD").compile("YYYYMMDD"));
             users.get_table().get(users.get_table().num_rows()-1,"Role").assign("Student");
             students.get_table().get(students.get_table().num_rows()-1,"Class").assign(res.at(0));
         }

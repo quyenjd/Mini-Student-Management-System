@@ -1,9 +1,11 @@
 #include "courses.h"
-#include "attendancelist.h"
-using namespace Csv;
-using namespace std;
+#include "date.h"
+
 namespace SMS
 {
+    using namespace Csv;
+    using namespace std;
+
     void create_academic_year() {   //checked
         Interface::input_menu menu;
         menu.set_title("School Year");

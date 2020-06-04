@@ -4,10 +4,11 @@
 #include "interface.h"
 #include "csv_import.h"
 
-using namespace Csv;
-using namespace std;
 namespace SMS
 {
+    using namespace Csv;
+    using namespace std;
+
     void create_academic_year();    // create new academic year
 
     void add_new_semester_to_academic_year();   // create a semester and add to one specific academic year
