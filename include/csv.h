@@ -6,6 +6,7 @@
 #include <cstring>
 #include <cmath>
 #include <cinttypes>
+#include <initializer_list>
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
@@ -77,7 +78,6 @@ namespace Csv
         void init()
         {
             string_copy("unknown", _type);
-            values = _tunknown();
         }
 
         // assign functions
@@ -312,7 +312,8 @@ namespace Csv
                 }
                 return buf;
             }
-            return new Char;
+			Pchar buf = new Char[1]; buf[0] = '\0';
+            return buf;
         }
 
         // convert current value (of any type) to double.
@@ -417,8 +418,8 @@ namespace Csv
         }
 
     public:
-        // constructors. if 'num_elms' is given, this function reserves a number of
-        // elements after initialization.
+        // constructors.
+		// if 'num_elms' is given, this function reserves a number of elements.
         list (Int num_elms = 0)
         {
             head = new iter();
@@ -426,6 +427,14 @@ namespace Csv
             for (Int i = 0; i < num_elms; ++i)
                 push_back(T());
         }
+
+		list (std::initializer_list<multitype> e)
+		{
+			head = new iter();
+			_size = 0;
+			for (multitype item : e)
+				push_back(item);
+		}
 
         // push an element with value 'e' to the back of the list.
         void push_back (const T& e)
@@ -515,7 +524,7 @@ namespace Csv
             iter *root = head;
             while (pos-- && root->next != nullptr)
                 root = root->next;
-            return root->next->value;
+            return root->next != nullptr ? root->next->value : *new T();
         }
         T at (Int pos) const
         {
@@ -524,7 +533,7 @@ namespace Csv
             iter *root = head;
             while (pos-- && root->next != nullptr)
                 root = root->next;
-            return root->next->value;
+            return root->next != nullptr ? root->next->value : T();
         }
 
         // remove the element at the position 'pos' from the list.
@@ -535,11 +544,21 @@ namespace Csv
             iter *root = head;
             while (pos-- && root->next != nullptr)
                 root = root->next;
-            iter *next = root->next->next;
+			iter* next;
+			next = root->next != nullptr ? root->next->next : nullptr;
             delete[] root->next;
             root->next = next;
             --_size;
         }
+
+		// make a copy of a list.
+		list<T> copy() const
+		{
+			list<T> res;
+			for (int i = 0; i < _size; ++i)
+				res.push_back(at(i));
+			return res;
+		}
     };
 
     // main database saver/handler of the whole project.
@@ -612,10 +631,50 @@ namespace Csv
         // get the name list of all table columns.
         list<multitype> get_keys() const
         {
-            return keys;
+            return keys.copy();
         }
 
-        // add a row to the table
+		// fix table keys down to a fixed list of keys.
+		void fix_keys (list<multitype> nkeys)
+		{
+			list<multitype> curkeys = get_keys();
+			for (Int i = 0; i < curkeys.size(); ++i)
+			{				
+				bool flag = false;
+				for (Int j = 0; j < nkeys.size(); ++j)
+					if (curkeys.at(i).equal(nkeys.at(j)))
+						flag = true;
+				if (!flag)
+					rm_key(curkeys.at(i));
+			}
+			for (Int i = 0; i < nkeys.size(); ++i)
+				add_key(nkeys.at(i));
+			
+			// sort the columns
+			for (Int i = 0; i < nkeys.size(); ++i)
+				for (Int j = i + 1; j < nkeys.size(); ++j)
+				{
+					Int key_i = get_key(nkeys.at(i)),
+						key_j = get_key(nkeys.at(j));
+					if (key_i > key_j)
+					{
+						for (Int k = 0; k < num_rows(); ++k)
+						{
+							multitype tmp = get_row(k).at(key_i);
+							get_row(k).at(key_i).assign(get_row(k).at(key_j));
+							get_row(k).at(key_j).assign(tmp);
+						}
+						multitype tmp = nkeys.at(i);
+						nkeys.at(i) = nkeys.at(j);
+						nkeys.at(j) = tmp;
+						tmp = keys.at(key_i);
+						keys.at(key_i) = keys.at(key_j);
+						keys.at(key_j) = tmp;
+					}
+				} 
+		}
+
+        // add a row to the table.
         void add_row()
         {
             plist *head = rows;
@@ -634,7 +693,8 @@ namespace Csv
             plist *head = rows;
             while (row-- && head->next != nullptr)
                 head = head->next;
-            plist *next = head->next->next;
+			plist* next;
+			next = head->next != nullptr ? head->next->next : nullptr;
             delete[] head->next;
             head->next = next;
             --_num_rows;
@@ -655,16 +715,16 @@ namespace Csv
             plist *head = rows;
             while (row-- && head->next != nullptr)
                 head = head->next;
-            return head->next->value;
+			return head->next != nullptr ? head->next->value : *new list<multitype>();
         }
         list<multitype> get_row (Int row) const
         {
             if (row < 0 || row >= _num_rows)
-                return *new list<multitype>();
+                return list<multitype>();
             plist *head = rows;
             while (row-- && head->next != nullptr)
                 head = head->next;
-            return head->next->value;
+            return head->next != nullptr ? head->next->value.copy() : list<multitype>();
         }
 
         // get the row where the column named 'key_search' has the value of 'e'.
@@ -694,7 +754,7 @@ namespace Csv
             while (head->next != nullptr)
             {
                 if (strict ? head->next->value.at(key_id).strict_equal(e) : head->next->value.at(key_id).equal(e))
-                    return head->next->value;
+                    return head->next->value.copy();
                 head = head->next;
             }
             return list<multitype>();
@@ -709,7 +769,8 @@ namespace Csv
             while (row-- && head->next != nullptr)
                 head = head->next;
             Int pos = get_key(key);
-            return pos == -1 ? (*new multitype("bad_access")) : head->next->value.at(pos);
+            return pos == -1 ? (*new multitype("bad_access")) :
+							   (head->next != nullptr ? head->next->value.at(pos) : *new multitype());
         }
         multitype get (Int row, const multitype& key) const
         {
@@ -719,7 +780,8 @@ namespace Csv
             while (row-- && head->next != nullptr)
                 head = head->next;
             Int pos = get_key(key);
-            return pos == -1 ? (*new multitype("bad_access")) : head->next->value.at(pos);
+			return pos == -1 ? (*new multitype("bad_access")) :
+							   (head->next != nullptr ? head->next->value.at(pos) : multitype());
         }
 
         // get the value of the column named 'key_get' on the row where there is
@@ -791,9 +853,9 @@ namespace Csv
         {
             int Nkeys = get_keys().size(),
                 Nrows = num_rows();
-            bool markRow[Nrows], markCol[Nkeys];
-            memset(markRow, 0, sizeof markRow);
-            memset(markCol, 0, sizeof markCol);
+            bool *markRow = new bool[Nrows], *markCol = new bool[Nkeys];
+            memset(markRow, 0, Nrows * sizeof(bool));
+            memset(markCol, 0, Nkeys * sizeof(bool));
             for (int i = 0; i < Nrows; ++i)
                 for (int j = 0; j < Nkeys; ++j)
                     if (_filter_func(get_keys().at(j), get_row(i), (*this)))

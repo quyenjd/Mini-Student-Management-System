@@ -245,8 +245,8 @@ void login()
 {
     input_menu login_menu;
     login_menu.set_title("Login");
-    login_menu.add_item("Username", false);
-    login_menu.add_item("Password", true);
+    login_menu.add_item("Username");
+    login_menu.add_item("Password");
     select_menu select;
     select.set_title("What do you want?");
     select.add_item(1, "Login");
@@ -346,9 +346,9 @@ void change_password()
 {
     input_menu change_pw;
     change_pw.set_title("Change password");
-    change_pw.add_item("Old password", true);
-    change_pw.add_item("New password", true);
-    change_pw.add_item("Confirm new password", true);
+    change_pw.add_item("Old password");
+    change_pw.add_item("New password");
+    change_pw.add_item("Confirm new password");
     list<multitype> res = change_pw.print_menu_and_wait(),
                     &row = users.get_table().get_row_where("ID", authorized_userid);
     if (row.at(1).equal(res.at(0)))
@@ -405,7 +405,7 @@ int main()
     pause();
 
     login();
-    print_note("Thank you for using this system!", "SMS is exiting...");
+    print_note("Thank you for using this system!", "Exiting SMS...");
     pause();
     return 0;
 }

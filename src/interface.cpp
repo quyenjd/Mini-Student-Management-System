@@ -246,7 +246,8 @@ namespace Interface
         {
             out << std::endl
                 << "  Your choice: ";
-            multitype choice; std::cin >> choice;
+            multitype choice;
+			readline(std::cin, choice);
             if (!items.get_where("No", choice, "No").equal("bad_access"))
             {
                 out << std::endl;
@@ -254,7 +255,6 @@ namespace Interface
             }
         }
     }
-
 
     input_menu::input_menu()
     {
