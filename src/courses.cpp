@@ -100,6 +100,11 @@ namespace SMS
 
         list<multitype> res=menu.print_menu_and_wait();
 
+        date sd,ed;
+        res.at(3).assign(sd.parse(res.at(3),"YYYY/MM/DD").compile("YYYY/MM/DD"));
+        res.at(4).assign(ed.parse(res.at(4),"YYYY/MM/DD").compile("YYYY/MM/DD"));
+
+
         for (int i=0;i<courses.get_table().num_rows();i++) {
             if (courses.get_table().get_row(i).at(0).equal(res.at(0))) {
                 Interface::print_note("This course has already been in the list","Failed");
@@ -171,12 +176,17 @@ namespace SMS
 
                 list<multitype> res=menu.print_menu_and_wait();
 
+                date sd,ed;
+                res.at(2).assign(sd.parse(res.at(2),"YYYY/MM/DD").compile("YYYY/MM/DD"));
+                res.at(3).assign(ed.parse(res.at(3),"YYYY/MM/DD").compile("YYYY/MM/DD"));
+
                 for (int j=0;j<11;j++) courses.get_table().get_row(select-1).at(j+1).assign(res.at(j));
 
-                Interface::print_note("Edited course successful","Success");
+                Interface::print_note("Edited course successfully","Success");
                 courses.init_write();
                 courses.write_and_terminate();
                 Interface::pause();
+                break;
             }
         } while (select != courses.get_table().num_rows()+1);
 
@@ -200,6 +210,7 @@ namespace SMS
                 courses.init_write();
                 courses.write_and_terminate();
                 Interface::pause();
+                break;
             }
         } while (select != courses.get_table().num_rows()+1);
     }
@@ -229,6 +240,7 @@ namespace SMS
                 years.init_write();
                 years.write_and_terminate();
                 Interface::pause();
+                break;
             }
         } while (select != years.get_table().num_rows()+1);
 
