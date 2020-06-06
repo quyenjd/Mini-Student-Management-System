@@ -771,6 +771,8 @@ namespace SMS
                 }
                 course_add.read_and_terminate();
 
+                course_add.get_table().fix_keys({"Course ID","Course name","Class","Start date","End date","Day of week","Start hour","Start minute","End hour","End minute","Room"});
+
                 for (int i=0;i<course_add.get_table().num_rows();i++) {
                     int check=0;
                     for (int j=0;j<courses.get_table().num_rows();j++) {
