@@ -229,6 +229,7 @@ namespace SMS{
             return;
         }
         import.read_and_terminate();
+        import.get_table().fix_keys({"Student ID","Fullname","Gender","DoB"});
         for (int i=0;i<import.get_table().num_rows();i++){
             students.get_table().add_row();
             users.get_table().add_row();
