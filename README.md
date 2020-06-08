@@ -90,6 +90,12 @@ classDiagram
     }				
 ```
 
+## Mentors
+- Dr. Dinh Ba Tien
+- M.S. Truong Phuoc Loc
+- M.S. Ho Tuan Thanh
+- M.S. Do Nguyen Kha
+
 ## License
-All rights reserved.
+All rights reserved.\
 `csv.h` is under Apache License 2.0. [Read more](LICENSE).
