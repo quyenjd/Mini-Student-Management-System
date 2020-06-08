@@ -28,7 +28,8 @@ namespace SMS{
         menu.add_item("Student ID");
         list<multitype> res=menu.print_menu_and_wait(true);
         if (checkExist(res.at(0))==false){
-            Interface::print_note("The student is not exist","Error");
+            Interface::print_note("The student does not exist","Error");
+            Interface::pause();
             return;
         }
         students.get_table().rm_row_where("Student ID",res.at(0));
@@ -48,7 +49,8 @@ namespace SMS{
             return;
         }
         coursestudent.write_and_terminate();
-        Interface::print_note("Remove successfully","Result");
+        Interface::print_note("Removed successfully","Result");
+        Interface::pause();
     }
 
     void addStudent(){
@@ -61,7 +63,8 @@ namespace SMS{
         menu.add_item("Class");
         list<multitype> res=menu.print_menu_and_wait(false);
         if (checkExist(res.at(0))==true){
-            Interface::print_note("The student is exist","Error");
+            Interface::print_note("The student already exists","Error");
+            Interface::pause();
             return;
         }
         students.get_table().add_row();
@@ -83,6 +86,7 @@ namespace SMS{
         }
         users.write_and_terminate();
         Interface::print_note("Added successfully","Result");
+        Interface::pause();
     }
 
     void editStudent(){
@@ -100,6 +104,7 @@ namespace SMS{
         menu2.add_item(6,"Exit");
         if (checkExist(res.at(0))==false){
             Interface::print_note("The student does not exist","Error");
+            Interface::pause();
             return;
         }
         int num;
@@ -169,6 +174,7 @@ namespace SMS{
         users.write_and_terminate();
         coursestudent.write_and_terminate();
         Interface::print_note("Edit successfully","Result");
+        Interface::pause();
     }
 
     void updateusers(){

@@ -136,7 +136,7 @@ namespace SMS
             }
         }
 
-        Interface::print_note(multitype("Added all student from clase ").append(courses.get_table().get_row(courses.get_table().num_rows()-1).at(2)).append("successfully"),"success");
+        Interface::print_note(multitype("Added all students from class ").append(courses.get_table().get_row(courses.get_table().num_rows()-1).at(2)).append(" successfully"),"success");
 
         coursestudent.init_write();
         coursestudent.write_and_terminate();
