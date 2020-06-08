@@ -4,3 +4,5 @@
 !*.h
 !.gitignore
 !*.csv
+!*.pdf
+!*.md

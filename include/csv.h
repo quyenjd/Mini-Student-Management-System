@@ -1,3 +1,16 @@
+// Copyright 2020 Quyen Dinh (@quyenjd). All rights reserved.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #ifndef CSV_QUYENJD_H
 #define CSV_QUYENJD_H
 
@@ -639,7 +652,7 @@ namespace Csv
 		{
 			list<multitype> curkeys = get_keys();
 			for (Int i = 0; i < curkeys.size(); ++i)
-			{				
+			{
 				bool flag = false;
 				for (Int j = 0; j < nkeys.size(); ++j)
 					if (curkeys.at(i).equal(nkeys.at(j)))
@@ -649,7 +662,7 @@ namespace Csv
 			}
 			for (Int i = 0; i < nkeys.size(); ++i)
 				add_key(nkeys.at(i));
-			
+
 			// sort the columns
 			for (Int i = 0; i < nkeys.size(); ++i)
 				for (Int j = i + 1; j < nkeys.size(); ++j)
@@ -671,7 +684,7 @@ namespace Csv
 						keys.at(key_i) = keys.at(key_j);
 						keys.at(key_j) = tmp;
 					}
-				} 
+				}
 		}
 
         // add a row to the table.

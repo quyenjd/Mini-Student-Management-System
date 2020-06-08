@@ -20,7 +20,7 @@ namespace SMS
     extern csv_handler years;
     extern csv_handler yearsemester;
 
-    void csv_read_util (csv_handler& csv, const multitype& filename);
+    void csv_read_util (csv_handler& csv, const multitype& filename, const list<multitype>& keys);
 
     // import all csv files.
     void init_all_csvs();
