@@ -24,7 +24,7 @@ date::date (const Csv::multitype& _year, const Csv::multitype& _month, const Csv
     minute = Max(0, Min(59, _minute.to_int()));
 }
 
-void date::now()
+date& date::now()
 {
     std::time_t t = std::time(0);
     std::tm *cur = std::localtime(&t);
@@ -34,6 +34,7 @@ void date::now()
     wday = cur->tm_wday;
     hour = cur->tm_hour;
     minute = cur->tm_min;
+    return *this;
 }
 
 date& date::parse (const Csv::multitype& e, const Csv::multitype& format)

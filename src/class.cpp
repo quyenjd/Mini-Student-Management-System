@@ -28,7 +28,7 @@ namespace SMS{
         menu.add_item("Student ID");
         list<multitype> res=menu.print_menu_and_wait(true);
         if (checkExist(res.at(0))==false){
-            Interface::print_note("The student does not exist","Error");
+            Interface::print_note("Student does not exist","Error");
             Interface::pause();
             return;
         }
@@ -61,7 +61,7 @@ namespace SMS{
         menu.add_item("DoB (YYYY/MM/DD)");
         menu.add_item("Gender");
         menu.add_item("Class");
-        list<multitype> res=menu.print_menu_and_wait(false);
+        list<multitype> res=menu.print_menu_and_wait();
         if (checkExist(res.at(0))==true){
             Interface::print_note("The student already exists","Error");
             Interface::pause();
@@ -103,7 +103,7 @@ namespace SMS{
         menu2.add_item(5,"Class");
         menu2.add_item(6,"Exit");
         if (checkExist(res.at(0))==false){
-            Interface::print_note("The student does not exist","Error");
+            Interface::print_note("Student does not exist","Error");
             Interface::pause();
             return;
         }
@@ -205,22 +205,22 @@ namespace SMS{
 
     multitype s;
     bool filterStudent (multitype column,list<multitype> row,table tb){
-        if (!column.equal("Fullname"))
-            return false;
         return row.at(4).equal(s);
     }
 
     void viewClass(){
         Interface::print_table(students.get_table().filter(filterClass),"Class");
+        Interface::pause();
     }
 
     void viewStudentInClass(){
         Interface::input_menu menu;
         menu.set_title("View Student");
         menu.add_item("Class");
-        list<multitype> res=menu.print_menu_and_wait(false);
+        list<multitype> res=menu.print_menu_and_wait(true);
         s=res.at(0);
         Interface::print_table(students.get_table().filter(filterStudent),"Students");
+        Interface::pause();
     }
     void newClass(){
         Interface::input_menu menu;

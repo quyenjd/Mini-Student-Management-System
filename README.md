@@ -5,13 +5,14 @@ This is our project of building a Student Management System (SMS) *entirely* in 
 <img src="https://i.ibb.co/Tg7ggrq/intro.png" alt="Intro">
 </p>
 
-> Click [here](CS162-FinalProject.pdf) for more information.
+> Click [here](CS162-FinalProject.pdf) for full list of features.
+[View project planner file](CS162-ProjectPlanner.xlsx).
 
 ## Build
-The program is bulit using TDM-GCC Compiler, GCC 5.1.0, MinGW 32-bit edition. All codes are written in C++11.
+The program is built using TDM-GCC Compiler, GCC 5.1.0, MinGW Windows 32-bit edition. All codes are written in C++11.
 
 ## Hierachy
-We implemented the following structure for the SMS. Each of the objects has its own add, edit, delete and view functions.
+We implemented the following structure for the SMS. Each of the objects has its own add, edit, delete and view operations.
 
 <p align="center">
 <img src="https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggVERcbkEoQWNhZGVtaWMgeWVhcikgLS0-IEIoU2VtZXN0ZXJzKVxuQiAtLT4gQyhDb3Vyc2VzKVxuQyAtLT4gRChBdHRlbmRhbmNlIGxpc3QpXG5DIC0tPiBFKFNjb3JlYm9hcmQpXG5DIC0tPiBHKFN0dWRlbnRzKVxuRihDbGFzcykgLS0-IEciLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ" alt="Hierachy">
@@ -39,11 +40,11 @@ graph TD
 ```
 classDiagram
     main <|-- SMS
-	SMS <|-- csv_handler
-	SMS <|-- date
+    SMS <|-- csv_handler
+    SMS <|-- date
     SMS <|-- multitype
     SMS <|-- interface
-	csv_handler <|-- table
+    csv_handler <|-- table
     table <|-- list
     table <|-- multitype
     interface <|-- table

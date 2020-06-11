@@ -139,6 +139,12 @@ namespace SMS
             return;
         lecturers.write_and_terminate();
 
+        users.get_table().rm_row_where("ID",lecturerID);
+
+        if (!users.init_write()) return;
+
+        users.write_and_terminate();
+
         Interface::print_note(Csv::multitype("Lecturer:").append(lecturerID).append(" has been removed successfully!"),
                               "Success");
         Interface::pause();

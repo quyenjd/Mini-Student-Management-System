@@ -187,10 +187,8 @@ namespace SMS
                     attendancelist.write_and_terminate();
                     Interface::print_note("Successfully deleted the attendance.", "Edit attendance");
                     Interface::pause();
-                    break;
                 }
-                else
-                    break;
+                break;
             }
         }
     }
@@ -275,7 +273,7 @@ namespace SMS
         int Nrows = courses_table.num_rows();
 
         Interface::select_menu select;
-        select.set_title("Ongoing courses");
+        select.set_title(multitype("In-progress lectures (").append(date().now().compile("YYYY/MM/DD hh:mm")).append(")"));
         for (int i = 0; i < Nrows; ++i)
         {
             Csv::list<Csv::multitype> row = courses_table.get_row(i);

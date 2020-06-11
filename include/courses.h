@@ -50,5 +50,6 @@ namespace SMS
     void view_semester_in_academic_year(); // view list semester in a academic year
 
     void delete_academic_year(); // delete academic year
+
 };
 #endif // COURSES_H

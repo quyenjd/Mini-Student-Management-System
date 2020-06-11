@@ -16,7 +16,7 @@ struct date
           const Csv::multitype& _minute = 0);
 
     // set date to current time.
-    void now();
+    date& now();
 
     // parse string into time.
     // syntax: 'Y' for year, 'M' for month, 'D' for day, 'h' for hour, 'm' for minute.

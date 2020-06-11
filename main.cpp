@@ -217,7 +217,7 @@ void student_menu()
 {
     multitype student_operations__main[] = {"Check-in", // quyen
                                             "View my check-in result", // quyen
-                                            "View my schedules", // dat
+                                            "View my schedule", // dat
                                             "View my scoreboard" // quyen
                                            };
     void (*__main[])() = {student_menu__checkin, student_menu__view_checkin,
