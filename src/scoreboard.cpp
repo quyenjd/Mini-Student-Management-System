@@ -54,7 +54,7 @@ namespace SMS
                     break;
                 }
                 csv.read_and_terminate();
-                csv.get_table().fix_keys({"Student ID","Course ID","Midterm","Final","Bonus","Total"});
+                csv.get_table().fix_keys({"Student ID", "Midterm", "Final", "Bonus", "Total"});
                 for (int i = 0; i < csv.get_table().num_rows(); ++i)
                 {
                     scoreboard_table.add_row();

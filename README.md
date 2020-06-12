@@ -5,7 +5,7 @@ This is our project of building a Student Management System (SMS) *entirely* in 
 <img src="https://i.ibb.co/Tg7ggrq/intro.png" alt="Intro">
 </p>
 
-> Click [here](CS162-FinalProject.pdf) for full list of features.
+> Click [here](CS162-FinalProject.pdf) for full list of features.\
 [View project planner file](CS162-ProjectPlanner.xlsx).
 
 ## Build

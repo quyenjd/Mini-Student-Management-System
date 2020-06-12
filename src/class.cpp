@@ -256,6 +256,8 @@ namespace SMS{
         }
         students.write_and_terminate();
         users.write_and_terminate();
+        Interface::print_note("Imported students from file successfully.", "Success");
+        Interface::pause();
     }
 
 }
