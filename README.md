@@ -15,7 +15,7 @@ The program is built using TDM-GCC Compiler, GCC 5.1.0, MinGW Windows 32-bit edi
 We implemented the following structure for the SMS. Each of the objects has its own add, edit, delete and view operations.
 
 <p align="center">
-<img src="https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggVERcbkEoQWNhZGVtaWMgeWVhcikgLS0-IEIoU2VtZXN0ZXJzKVxuQiAtLT4gQyhDb3Vyc2VzKVxuQyAtLT4gRChBdHRlbmRhbmNlIGxpc3QpXG5DIC0tPiBFKFNjb3JlYm9hcmQpXG5DIC0tPiBHKFN0dWRlbnRzKVxuRihDbGFzcykgLS0-IEciLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ" alt="Hierachy">
+<img src="https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggVERcbiAgICBBKEFjYWRlbWljIHllYXIpIC0tPiBCKFNlbWVzdGVycylcbiAgICBCIC0tPiBDKENvdXJzZXMpXG4gICAgQyAtLT4gRChBdHRlbmRhbmNlIGxpc3QpXG4gICAgQyAtLT4gRShTY29yZWJvYXJkKVxuICAgIEMgLS0-IEYoTGVjdHVyZXJzKVxuICAgIEMgLS0-IEgoU3R1ZGVudHMpXG4gICAgRyhDbGFzcykgLS0-IEgiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlfQ" alt="Hierachy">
 </p>
 
 > You can use the following mermaid script to re-generate the chart.
@@ -26,8 +26,9 @@ graph TD
     B --> C(Courses)
     C --> D(Attendance list)
     C --> E(Scoreboard)
-    C --> G(Students)
-    F(Class) --> G
+    C --> F(Lecturers)
+    C --> H(Students)
+    G(Class) --> H
 ```
 
 ## Classes
